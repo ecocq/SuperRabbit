@@ -87,9 +87,9 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir)\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\include;$(ProjectDir)\external;$(ProjectDir)\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,9 +110,9 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)\include64;$(ProjectDir)\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\common;$(ProjectDir)\include64;$(ProjectDir)\external;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -120,6 +120,8 @@
       <AdditionalLibraryDirectories>$(ProjectDir)\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;glu32.lib;glfw3dll.lib;%(AdditionalDependencies);kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <MidlCommandFile>copy "$(ProjectDir)lib64\*.dll" "$(TargetDir)</MidlCommandFile>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PreBuildEvent>
       <Command>copy "$(ProjectDir)lib64\*.dll" "$(TargetDir)</Command>
@@ -171,7 +173,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="common\controls.cpp" />
+    <ClCompile Include="common\objloader.cpp" />
+    <ClCompile Include="common\quaternion_utils.cpp" />
+    <ClCompile Include="common\shader.cpp" />
+    <ClCompile Include="common\tangentspace.cpp" />
+    <ClCompile Include="common\text2D.cpp" />
+    <ClCompile Include="common\texture.cpp" />
+    <ClCompile Include="common\vboindexer.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\controls.hpp" />
+    <ClInclude Include="common\objloader.hpp" />
+    <ClInclude Include="common\quaternion_utils.hpp" />
+    <ClInclude Include="common\shader.hpp" />
+    <ClInclude Include="common\tangentspace.hpp" />
+    <ClInclude Include="common\text2D.hpp" />
+    <ClInclude Include="common\texture.hpp" />
+    <ClInclude Include="common\vboindexer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

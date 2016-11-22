@@ -13,10 +13,63 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers sources\common">
+      <UniqueIdentifier>{834e8414-34c8-4dc3-a5ea-0e84e91a26c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="common\quaternion_utils.cpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\shader.cpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\tangentspace.cpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\text2D.cpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\texture.cpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\vboindexer.cpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\controls.cpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="common\objloader.cpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\objloader.hpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\quaternion_utils.hpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\shader.hpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\tangentspace.hpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\text2D.hpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\texture.hpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\vboindexer.hpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\controls.hpp">
+      <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
