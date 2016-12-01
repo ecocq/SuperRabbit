@@ -195,14 +195,6 @@
     <ClInclude Include="common\vboindexer.hpp" />
     <ClInclude Include="ObjParser.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Object Include="obj\Rabbit.obj" />
-    <Object Include="obj\stickerman.obj" />
-    <Object Include="obj\wolf-obj.obj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="obj\wolf-obj.mtl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
