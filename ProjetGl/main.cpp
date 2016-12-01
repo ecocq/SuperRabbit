@@ -31,9 +31,12 @@ int main(void)
 		return -1;
 	}
 
-	std::vector<glm::vec4> geometric_vertex;
-	std::vector<glm::vec3> texture_coords;
-	std::vector<glm::vec3> vertex_normals;
+	std::vector<glm::vec4> geometric_vertex;
+
+	std::vector<glm::vec3> texture_coords;
+
+	std::vector<glm::vec3> vertex_normals;
+
 	if (!loadObjFile("obj/Rabbit.obj", geometric_vertex, texture_coords, vertex_normals)) {
 		fprintf(stderr, "Failed to load obj\n");
 		getchar();
