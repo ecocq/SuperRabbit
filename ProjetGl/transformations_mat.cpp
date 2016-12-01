@@ -55,3 +55,14 @@ glm::mat4 rotation_z(float angle_d) {
 	glm::mat4 rot_mat = glm::make_mat4(rot_);
 	return rot_mat;
 }
+
+glm::mat4 scale(glm::vec3 vector) {
+	float vector_[16] = {
+		vector.x, 0, 0, 0,
+		0, vector.y, 0, 0,
+		0, 0, vector.z, 0,
+		0, 0, 0, 1
+	};
+	glm::mat4 vector_mat = glm::make_mat4(vector_);
+	return vector_mat;
+}
