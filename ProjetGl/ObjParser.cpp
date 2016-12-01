@@ -43,7 +43,7 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 		else if (type == "vt") {
 			glm::vec3 coord;
 			coord.z = 0.0f; // Default value
-			sscanf(line_char.c_str(), "%f %f\n", &coord.x, &coord.y, &coord.z);
+			sscanf(line_char.c_str(), "%f %f %f\n", &coord.x, &coord.y, &coord.z);
 			temp_texture_coords.push_back(coord);
 		}
 		else if (type == "vn") {
@@ -76,20 +76,15 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 
 			for each (faces face in face_tab)
 			{
+				geometric_vertex.push_back(temp_vertex[face.vertex - 1]);
+				if (face.text_coords != -1) {
+					texture_coords.push_back(temp_texture_coords[face.text_coords - 1]);
+				}
+				if (face.normal != -1) {
+					vertex_normals.push_back(temp_normals[face.normal - 1]);
+				}
 				temp_faces.push_back(face);
 			}
-		}
-	}
-
-	for each (faces face in temp_faces)
-	{
-
-		geometric_vertex.push_back(temp_vertex[face.vertex -1]);
-		if (face.text_coords != -1) {
-			texture_coords.push_back(temp_texture_coords[face.text_coords - 1]);
-		}
-		if (face.normal != -1) {
-			vertex_normals.push_back(temp_normals[face.normal - 1]);
 		}
 	}
 

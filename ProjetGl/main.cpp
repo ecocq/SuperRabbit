@@ -34,7 +34,7 @@ int main(void)
 	std::vector<glm::vec4> geometric_vertex;
 	std::vector<glm::vec3> texture_coords;
 	std::vector<glm::vec3> vertex_normals;
-	if (!loadObjFile("Rabbit.obj", geometric_vertex, texture_coords, vertex_normals)) {
+	if (!loadObjFile("wolf-obj.obj", geometric_vertex, texture_coords, vertex_normals)) {
 		fprintf(stderr, "Failed to load obj\n");
 		getchar();
 		return -1;
