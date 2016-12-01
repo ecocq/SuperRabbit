@@ -45,6 +45,9 @@
     <ClCompile Include="common\objloader.cpp">
       <Filter>Fichiers sources\common</Filter>
     </ClCompile>
+    <ClCompile Include="ObjParser.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\objloader.hpp">
@@ -70,6 +73,9 @@
     </ClInclude>
     <ClInclude Include="common\controls.hpp">
       <Filter>Fichiers sources\common</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjParser.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

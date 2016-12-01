@@ -15,6 +15,8 @@ GLFWwindow* window;
 using namespace glm;
 
 #include "common/shader.hpp"
+#include "ObjParser.h"
+
 
 int main( void )
 {
@@ -25,6 +27,12 @@ int main( void )
 		getchar();
 		return -1;
 	}
+
+	std::vector<glm::vec4> geometric_vertex;
+	std::vector<glm::vec3> texture_coords;
+	std::vector<glm::vec3> vertex_normals;
+	loadObjFile("Rabbit.obj", geometric_vertex, texture_coords, vertex_normals);
+
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -171,6 +179,11 @@ int main( void )
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
+	GLuint vertexbuffer_rabbit;
+	glGenBuffers(1, &vertexbuffer_rabbit);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer_rabbit);
+	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
+
 	GLuint colorbuffer;
 	glGenBuffers(1, &colorbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
@@ -189,6 +202,7 @@ int main( void )
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 		// 1rst attribute buffer : vertices
+		/* 
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 		glVertexAttribPointer(
@@ -213,10 +227,27 @@ int main( void )
 		);
 
 		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles
+		glDrawArrays(GL_TRIANGLES, 0, 12*3); // 12*3 indices starting at 0 -> 12 triangles */
+		// 1rst attribute buffer : vertices
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer_rabbit);
+		glVertexAttribPointer(
+			0,                  // attribute
+			4,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+
+		
+
+		// Draw the triangle !
+		glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
+
 
 		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
+		// glDisableVertexAttribArray(1);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
