@@ -71,6 +71,7 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 			
 			std::istringstream iss(line_char);
 			std::string s;
+			int nbVertices = 0;
 			// Separating groups
 			while (std::getline(iss, s, ' ')) {
 				if (s.empty()) {
@@ -111,6 +112,20 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 						m_face.normals.push_back(normal);
 						
 					}
+
+					if (nbVertices == 3) {
+						// The face has 4 vertices, therefore we need to split it into 2 triangles
+						int index1 = m_face.vertex.size() - 4;
+						int index2 = m_face.vertex.size() - 2;
+						m_face.vertex.push_back(m_face.vertex.at(index1));
+						m_face.text_coords.push_back(m_face.text_coords.at(index1));
+						m_face.normals.push_back(m_face.normals.at(index1));
+						m_face.vertex.push_back(m_face.vertex.at(index2));
+						m_face.text_coords.push_back(m_face.text_coords.at(index2));
+						m_face.normals.push_back(m_face.normals.at(index2));
+						break;
+					}
+					nbVertices++;
 				}
 
 			    // TODO : handle errors
