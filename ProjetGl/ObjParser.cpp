@@ -1,5 +1,20 @@
 #include "ObjParser.h"
 
+#include <sstream>
+
+int count_substr(std::string s, std::string substr) {
+	int count = 0;
+	size_t nPos = s.find(substr, 0); // fist occurrence
+	while (nPos != std::string::npos)
+	{
+		count++;
+		nPos = s.find(substr, nPos + 1);
+	}
+
+	return count;
+}
+
+
 bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex,
 	std::vector<glm::vec3> &texture_coords,
 	std::vector<glm::vec3> &vertex_normals) {
@@ -12,7 +27,7 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 	std::vector<glm::vec3> temp_texture_coords;
 	std::vector<glm::vec3> temp_normals;
 
-	std::vector<faces> temp_faces; // x will be the vertex, y the coords and z the normals
+	std::vector<face> temp_faces; // x will be the vertex, y the coords and z the normals
 
 	std::ifstream ifs(file_path);
 	if (!ifs) {
@@ -43,7 +58,7 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 		else if (type == "vt") {
 			glm::vec3 coord;
 			coord.z = 0.0f; // Default value
-			sscanf(line_char.c_str(), "%f %f\n", &coord.x, &coord.y, &coord.z);
+			sscanf(line_char.c_str(), "%f %f %f\n", &coord.x, &coord.y, &coord.z);
 			temp_texture_coords.push_back(coord);
 		}
 		else if (type == "vn") {
@@ -52,46 +67,73 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 			temp_normals.push_back(normal);
 		}
 		else if (type == "f") {
-			faces face_tab[3];
-			size_t n = std::count(line_char.begin(), line_char.end(), '/');
-			if (n == 6) {
-				int i = sscanf(line_char.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d\n", &face_tab[0].vertex, &face_tab[0].text_coords, &face_tab[0].normal, &face_tab[1].vertex, &face_tab[1].text_coords, &face_tab[1].normal, &face_tab[2].vertex, &face_tab[2].text_coords, &face_tab[2].normal);
-				if (i != 9) {
-					face_tab[0].text_coords = face_tab[1].text_coords = face_tab[2].text_coords = -1;
+			face m_face;
+			
+			std::istringstream iss(line_char);
+			std::string s;
+			// Separating groups
+			while (std::getline(iss, s, ' ')) {
+				if (s.empty()) {
+					continue;
 				}
-			}
-			else if (n == 0) {
-				sscanf(line_char.c_str(), "%d %d %d\n", &face_tab[0].vertex, &face_tab[1].vertex, &face_tab[2].vertex);
-				face_tab[0].text_coords = face_tab[1].text_coords = face_tab[2].text_coords = -1;
-				face_tab[0].normal = face_tab[1].normal = face_tab[2].normal = -1;
-			}
-			else if (n == 3) {
-				sscanf(line_char.c_str(), "%d/%d %d/%d %d/%d\n", &face_tab[0].vertex, &face_tab[0].text_coords, &face_tab[1].vertex, &face_tab[1].text_coords, &face_tab[2].vertex, &face_tab[2].text_coords);
-				face_tab[0].normal = face_tab[1].normal = face_tab[2].normal = -1;
-			}
-			else {
-				printf("error obj not supported");
-				return false;
+				
+				int n = count_substr(s, "//");
+				
+				// Vertex//Normal
+				if (n == 1) {
+					int vertex, normal;
+					sscanf(s.c_str(), "%d//%d", &vertex, &normal);
+					m_face.vertex.push_back(vertex);
+					m_face.normals.push_back(normal);
+				}
+				else {
+					n = count_substr(s, "/");
+		
+					// Vertex Only
+					if (n == 0) {
+						int vertex;
+						sscanf(s.c_str(), "%d", &vertex);
+						m_face.vertex.push_back(vertex);
+					}
+					// Vertex/texture
+					else if (n == 1) {
+						int vertex, texture;
+						sscanf(s.c_str(), "%d/%d", &vertex, &texture);
+						m_face.vertex.push_back(vertex);
+						m_face.text_coords.push_back(texture);
+					}
+					// Vertex/texture/normal
+					else if (n == 2) {
+						int vertex, texture, normal;
+						sscanf(s.c_str(), "%d/%d/%d", &vertex, &texture, &normal);
+						m_face.vertex.push_back(vertex);
+						m_face.text_coords.push_back(texture);
+						m_face.normals.push_back(normal);
+						
+					}
+				}
+
+			    // TODO : handle errors
 			}
 
-			for each (faces face in face_tab)
-			{
-				temp_faces.push_back(face);
-			}
+			
+				for each(int vertex in m_face.vertex) {
+					geometric_vertex.push_back(temp_vertex[vertex - 1]);
+				}
+				for each(int uv in m_face.text_coords) {
+					texture_coords.push_back(temp_texture_coords[uv - 1]);
+				}
+				for each(int normal in m_face.normals) {
+					vertex_normals.push_back(temp_normals[normal - 1]);
+				}
+				temp_faces.push_back(m_face);
+			
+			
+	
 		}
 	}
 
-	for each (faces face in temp_faces)
-	{
-
-		geometric_vertex.push_back(temp_vertex[face.vertex -1]);
-		if (face.text_coords != -1) {
-			texture_coords.push_back(temp_texture_coords[face.text_coords - 1]);
-		}
-		if (face.normal != -1) {
-			vertex_normals.push_back(temp_normals[face.normal - 1]);
-		}
-	}
+	
 
 	return true;
 }

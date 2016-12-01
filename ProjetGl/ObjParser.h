@@ -6,10 +6,10 @@
 
 #include <glm/glm.hpp>
 
-struct faces {
-	int vertex;
-	int text_coords;
-	int normal;
+struct face {
+	std::vector<int> vertex;
+	std::vector<int> text_coords;
+	std::vector<int> normals;
 };
 
 bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex,

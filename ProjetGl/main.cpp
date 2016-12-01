@@ -31,16 +31,22 @@ int main(void)
 		return -1;
 	}
 
-	std::vector<glm::vec4> geometric_vertex;
-	std::vector<glm::vec3> texture_coords;
+	std::vector<glm::vec4> geometric_vertex;
+	std::vector<glm::vec3> texture_coords;
 	std::vector<glm::vec3> vertex_normals;
-	if (!loadObjFile("obj/Rabbit.obj", geometric_vertex, texture_coords, vertex_normals)) {
+	if (!loadObjFile("obj/stickerman.obj", geometric_vertex, texture_coords, vertex_normals)) {
 		fprintf(stderr, "Failed to load obj\n");
 		getchar();
 		return -1;
 	}
 
+	std::cout << geometric_vertex.size() << std::endl;
+	std::cout << texture_coords.size() << std::endl;
+	std::cout << vertex_normals.size() << std::endl;
+
+
 	bool textures_coords_valid = (texture_coords.size() > 0 ? true : false );
+	bool normals_valid = (vertex_normals.size() > 0 ? true : false);
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -117,6 +123,13 @@ int main(void)
 		glBufferData(GL_ARRAY_BUFFER, texture_coords.size() * sizeof(glm::vec3), &texture_coords[0], GL_STATIC_DRAW);
 	}
 
+	GLuint normalbuffer;
+	if (normals_valid) {
+		glGenBuffers(1, &normalbuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
+	}
+
 	do {
 
 		// Clear the screen
@@ -166,13 +179,27 @@ int main(void)
 				0,                                // stride
 				(void*)0                          // array buffer offset
 			);
-		} 
+		}
+
+		if (normals_valid) {
+			glEnableVertexAttribArray(2);
+			glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+			glVertexAttribPointer(
+				2,                                // attribute
+				3,                                // size
+				GL_FLOAT,                         // type
+				GL_FALSE,                         // normalized?
+				0,                                // stride
+				(void*)0                          // array buffer offset
+			);
+		}
 
 		// Draw the triangle !
 		glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
