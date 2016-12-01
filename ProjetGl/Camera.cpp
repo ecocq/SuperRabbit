@@ -34,6 +34,10 @@ void Camera::execute(GLFWwindow *window)
 		position = translation(-cartesian_dir_right * speed, position);
 	}
 
+	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+		cartesian_dir = rotation_x(60.0f, position);
+	}
+
 	CamViewMatrice = glm::lookAt(glm::vec3(position), glm::vec3(position) + cartesian_dir, glm::vec3(0,1,0));
 
 	projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
