@@ -2,7 +2,7 @@
 class Camera
 {
 private:
-	glm::vec3 position = glm::vec3(0, 0, 5);
+	glm::vec4 position;
 	float speed;
 	glm::mat4 CamViewMatrice;
 	glm::mat4 projection;
@@ -11,8 +11,11 @@ public:
 	Camera();
 
 	void execute(GLFWwindow *window);
+
 	glm::mat4 getCamView() { return CamViewMatrice; };
 	glm::mat4 getProjection() { return projection; };
+
+//	glm::mat4 lookAt(glm::vec3 eye, glm::vec3 at, glm::vec3 up);
 
 	~Camera();
 };

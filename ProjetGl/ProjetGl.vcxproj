@@ -185,6 +185,7 @@
     <ClCompile Include="inputKeys.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjParser.cpp" />
+    <ClCompile Include="transformations_mat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="common\vboindexer.hpp" />
     <ClInclude Include="inputKeys.h" />
     <ClInclude Include="ObjParser.h" />
+    <ClInclude Include="transformation_mat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
