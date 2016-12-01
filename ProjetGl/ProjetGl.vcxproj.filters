@@ -48,9 +48,6 @@
     <ClCompile Include="ObjParser.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="inputKeys.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>

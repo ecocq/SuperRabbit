@@ -182,7 +182,6 @@
     <ClCompile Include="common\text2D.cpp" />
     <ClCompile Include="common\texture.cpp" />
     <ClCompile Include="common\vboindexer.cpp" />
-    <ClCompile Include="inputKeys.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjParser.cpp" />
     <ClCompile Include="transformations_mat.cpp" />
