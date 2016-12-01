@@ -17,8 +17,7 @@ using namespace glm;
 
 #include <common/shader.hpp>
 #include <common/texture.hpp>
-#include <common/controls.hpp>
-#include <common/objloader.hpp>
+#include "Camera.h"
 #include "ObjParser.h"
 
 int main(void)
@@ -33,8 +32,9 @@ int main(void)
 
 	std::vector<glm::vec4> geometric_vertex;
 	std::vector<glm::vec3> texture_coords;
-	std::vector<glm::vec3> vertex_normals;
-	if (!loadObjFile("obj/stickerman.obj", geometric_vertex, texture_coords, vertex_normals)) {
+	std::vector<glm::vec3> vertex_normals;
+
+	if (!loadObjFile("obj/Rabbit.obj", geometric_vertex, texture_coords, vertex_normals)) {
 		fprintf(stderr, "Failed to load obj\n");
 		getchar();
 		return -1;
@@ -123,6 +123,8 @@ int main(void)
 		glBufferData(GL_ARRAY_BUFFER, texture_coords.size() * sizeof(glm::vec3), &texture_coords[0], GL_STATIC_DRAW);
 	}
 
+	Camera* cam = new Camera();
+
 	GLuint normalbuffer;
 	if (normals_valid) {
 		glGenBuffers(1, &normalbuffer);
@@ -139,9 +141,10 @@ int main(void)
 		glUseProgram(programID);
 
 		// Compute the MVP matrix from keyboard and mouse input
-		computeMatricesFromInputs();
-		glm::mat4 ProjectionMatrix = getProjectionMatrix();
-		glm::mat4 ViewMatrix = getViewMatrix();
+
+		cam->execute(window);
+		glm::mat4 ProjectionMatrix = cam->getProjection();
+		glm::mat4 ViewMatrix = cam->getCamView();
 		glm::mat4 ModelMatrix = glm::mat4(1.0);
 		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
