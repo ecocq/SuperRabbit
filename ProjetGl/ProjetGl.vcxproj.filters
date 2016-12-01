@@ -78,4 +78,12 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="obj\Rabbit.obj" />
+    <Object Include="obj\stickerman.obj" />
+    <Object Include="obj\wolf-obj.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\wolf-obj.mtl" />
+  </ItemGroup>
 </Project>

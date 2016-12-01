@@ -34,7 +34,7 @@ int main(void)
 	std::vector<glm::vec3> geometric_vertex;
 	std::vector<glm::vec2> texture_coords;
 	std::vector<glm::vec3> vertex_normals;
-	if (!loadObjFile("wolf-obj.obj", geometric_vertex, texture_coords, vertex_normals)) {
+	if (!loadObjFile("obj/stickerman.obj", geometric_vertex, texture_coords, vertex_normals)) {
 		fprintf(stderr, "Failed to load obj\n");
 		getchar();
 		return -1;
@@ -98,7 +98,7 @@ int main(void)
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 
 	// Load the texture
-	GLuint Texture = loadDDS("wolf-obj.mtl");
+	GLuint Texture = loadDDS("obj/wolf-obj.mtl");
 
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
