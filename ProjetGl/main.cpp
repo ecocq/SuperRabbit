@@ -31,10 +31,10 @@ int main(void)
 		return -1;
 	}
 
-	std::vector<glm::vec3> geometric_vertex;
-	std::vector<glm::vec2> texture_coords;
+	std::vector<glm::vec4> geometric_vertex;
+	std::vector<glm::vec3> texture_coords;
 	std::vector<glm::vec3> vertex_normals;
-	if (!loadObjFile("wolf-obj.obj", geometric_vertex, texture_coords, vertex_normals)) {
+	if (!loadObjFile("Rabbit.obj", geometric_vertex, texture_coords, vertex_normals)) {
 		fprintf(stderr, "Failed to load obj\n");
 		getchar();
 		return -1;
@@ -108,13 +108,13 @@ int main(void)
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec3), &geometric_vertex[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
 
 	GLuint uvbuffer;
 	if (textures_coords_valid) {
 		glGenBuffers(1, &uvbuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glBufferData(GL_ARRAY_BUFFER, texture_coords.size() * sizeof(glm::vec2), &texture_coords[0], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, texture_coords.size() * sizeof(glm::vec3), &texture_coords[0], GL_STATIC_DRAW);
 	}
 
 	do {
@@ -147,7 +147,7 @@ int main(void)
 		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 		glVertexAttribPointer(
 			0,                  // attribute
-			3,                  // size
+			4,                  // size
 			GL_FLOAT,           // type
 			GL_FALSE,           // normalized?
 			0,                  // stride
@@ -160,13 +160,13 @@ int main(void)
 			glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 			glVertexAttribPointer(
 				1,                                // attribute
-				2,                                // size
+				3,                                // size
 				GL_FLOAT,                         // type
 				GL_FALSE,                         // normalized?
 				0,                                // stride
 				(void*)0                          // array buffer offset
 			);
-		}
+		} 
 
 		// Draw the triangle !
 		glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());

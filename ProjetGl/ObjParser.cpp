@@ -1,15 +1,15 @@
 #include "ObjParser.h"
 
-bool loadObjFile(const char* file_path, std::vector<glm::vec3> &geometric_vertex,
-	std::vector<glm::vec2> &texture_coords,
+bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex,
+	std::vector<glm::vec3> &texture_coords,
 	std::vector<glm::vec3> &vertex_normals) {
 
 	geometric_vertex.clear();
 	texture_coords.clear();
 	vertex_normals.clear();
 
-	std::vector<glm::vec3> temp_vertex;
-	std::vector<glm::vec2> temp_texture_coords;
+	std::vector<glm::vec4> temp_vertex;
+	std::vector<glm::vec3> temp_texture_coords;
 	std::vector<glm::vec3> temp_normals;
 
 	std::vector<faces> temp_faces; // x will be the vertex, y the coords and z the normals
@@ -35,15 +35,15 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec3> &geometric_vertex
 
 		// vertex points
 		if (type== "v") {
-			glm::vec3 vertex;
-			//vertex.w = 1.0f; // Default value
-			int n = sscanf(line_char.c_str(), "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z/*, &vertex.w*/);
+			glm::vec4 vertex;
+			vertex.w = 1.0f; // Default value
+			int n = sscanf(line_char.c_str(), "%f %f %f %f\n", &vertex.x, &vertex.y, &vertex.z, &vertex.w);
 			temp_vertex.push_back(vertex);
 		}
 		else if (type == "vt") {
-			glm::vec2 coord;
-			//coord.z = 0.0f; // Default value
-			sscanf(line_char.c_str(), "%f %f\n", &coord.x, &coord.y/*, &coord.z*/);
+			glm::vec3 coord;
+			coord.z = 0.0f; // Default value
+			sscanf(line_char.c_str(), "%f %f\n", &coord.x, &coord.y, &coord.z);
 			temp_texture_coords.push_back(coord);
 		}
 		else if (type == "vn") {
