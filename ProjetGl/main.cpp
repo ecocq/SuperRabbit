@@ -17,8 +17,7 @@ using namespace glm;
 
 #include <common/shader.hpp>
 #include <common/texture.hpp>
-#include <common/controls.hpp>
-#include <common/objloader.hpp>
+#include "Camera.h"
 #include "ObjParser.h"
 
 int main(void)
@@ -120,6 +119,8 @@ int main(void)
 		glBufferData(GL_ARRAY_BUFFER, texture_coords.size() * sizeof(glm::vec3), &texture_coords[0], GL_STATIC_DRAW);
 	}
 
+	Camera* cam = new Camera();
+
 	do {
 
 		// Clear the screen
@@ -129,9 +130,10 @@ int main(void)
 		glUseProgram(programID);
 
 		// Compute the MVP matrix from keyboard and mouse input
-		computeMatricesFromInputs();
-		glm::mat4 ProjectionMatrix = getProjectionMatrix();
-		glm::mat4 ViewMatrix = getViewMatrix();
+
+		cam->execute(window);
+		glm::mat4 ProjectionMatrix = cam->getProjection();
+		glm::mat4 ViewMatrix = cam->getCamView();
 		glm::mat4 ModelMatrix = glm::mat4(1.0);
 		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
