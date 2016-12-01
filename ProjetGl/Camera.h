@@ -4,6 +4,7 @@ class Camera
 private:
 	glm::vec4 position;
 	float speed;
+	float angle;
 	glm::mat4 CamViewMatrice;
 	glm::mat4 projection;
 

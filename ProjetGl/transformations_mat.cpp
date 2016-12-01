@@ -7,6 +7,8 @@
 
 #include "transformation_mat.h"
 
+#define PI 3.14159265
+
 glm::vec4 translation(glm::vec3 trans, glm::vec4 pos) {
 	float trans_[16] = {
 		1, 0, 0, trans.x,
@@ -18,7 +20,8 @@ glm::vec4 translation(glm::vec3 trans, glm::vec4 pos) {
 	return pos * trans_mat;
 }
 
-glm::vec4 rotation_x(float angle, glm::vec4 pos) {
+glm::vec4 rotation_x(float angle_d, glm::vec4 pos) {
+	float angle = angle_d * PI / 180.0;
 	float rot_[16] = {
 		1, 0, 0, 0,
 		0, cos(angle), sin(angle), 0,
@@ -29,7 +32,8 @@ glm::vec4 rotation_x(float angle, glm::vec4 pos) {
 	return pos * rot_mat;
 }
 
-glm::vec4 rotation_y(float angle, glm::vec4 pos) {
+glm::vec4 rotation_y(float angle_d, glm::vec4 pos) {
+	float angle = angle_d * PI / 180.0;
 	float rot_[16] = {
 		cos(angle), 0, -sin(angle), 0,
 		0, 1, 0, 0,
@@ -40,7 +44,8 @@ glm::vec4 rotation_y(float angle, glm::vec4 pos) {
 	return pos * rot_mat;
 }
 
-glm::vec4 rotation_z(float angle, glm::vec4 pos) {
+glm::vec4 rotation_z(float angle_d, glm::vec4 pos) {
+	float angle = angle_d * PI / 180.0;
 	float rot_[16] = {
 		cos(angle), -sin(angle), 0, 0,
 		sin(angle), cos(angle), 0, 0,
