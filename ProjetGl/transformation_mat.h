@@ -7,4 +7,7 @@ glm::mat4 rotation_x(float angle_d);
 glm::mat4 rotation_y(float angle_d);
 glm::mat4 rotation_z(float angle_d);
 
+glm::mat4 scale(glm::vec3 vector);
+glm::mat4 shear(bool unshear);
+
 #endif

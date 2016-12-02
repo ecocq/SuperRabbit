@@ -66,3 +66,14 @@ glm::mat4 scale(glm::vec3 vector) {
 	glm::mat4 vector_mat = glm::make_mat4(vector_);
 	return vector_mat;
 }
+
+glm::mat4 shear(bool unshear) {
+	float vector_[16] = {
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		unshear ? -1 : 1, unshear ? -1 : 1, 1, 0,
+		0, 0, 0, 1
+	};
+	glm::mat4 vector_mat = glm::make_mat4(vector_);
+	return vector_mat;
+}
