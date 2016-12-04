@@ -19,4 +19,6 @@ glm::mat4 shearing_xy(float s, float t);
 glm::mat4 shearing_xz(float s, float t);
 glm::mat4 shearing_yz(float s, float t);
 
+void applyRotation(glm::mat4 &matrice, float angle_x, float angle_y, float angle_z);
+
 #endif

@@ -19,6 +19,7 @@ using namespace glm;
 #include <common/texture.hpp>
 #include "Camera.h"
 #include "ObjParser.h"
+#include "transformation_mat.h"
 
 int main(void)
 {
@@ -123,14 +124,21 @@ int main(void)
 		glBufferData(GL_ARRAY_BUFFER, texture_coords.size() * sizeof(glm::vec3), &texture_coords[0], GL_STATIC_DRAW);
 	}
 
-	Camera* cam = new Camera();
-
 	GLuint normalbuffer;
 	if (normals_valid) {
 		glGenBuffers(1, &normalbuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
 		glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
 	}
+
+	//Init camera
+	Camera* cam = new Camera();
+	cam->execute(window);
+	glm::mat4 ProjectionMatrix = cam->getProjection();
+	glm::mat4 ViewMatrix = cam->getCamView();
+	glm::mat4 ModelMatrix = glm::mat4(1.0);
+	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
 
 	do {
 
@@ -140,13 +148,22 @@ int main(void)
 		// Use our shader
 		glUseProgram(programID);
 
-		// Compute the MVP matrix from keyboard and mouse input
-
+		//Cam
 		cam->execute(window);
-		glm::mat4 ProjectionMatrix = cam->getProjection();
-		glm::mat4 ViewMatrix = cam->getCamView();
-		glm::mat4 ModelMatrix = glm::mat4(1.0);
-		glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+		//TODO see how to replace this code to work well (cam + transformations):
+		/*ProjectionMatrix = cam->getProjection();
+		ViewMatrix = cam->getCamView();
+		MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;*/
+
+		// Compute the MVP matrix from keyboard and mouse input
+		//Apply transformations -- to put in another function after testing ;)
+		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+			applyRotation(MVP, 5, 0,0);
+		}
+		if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+			applyRotation(MVP, 0, 2, 0);
+		}
+
 
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
@@ -195,6 +212,12 @@ int main(void)
 				0,                                // stride
 				(void*)0                          // array buffer offset
 			);
+		}
+
+
+		//Apply transformations on all points
+		for each(vec4 point in geometric_vertex) {
+			point = point * MVP;
 		}
 
 		// Draw the triangle !

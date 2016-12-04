@@ -150,3 +150,15 @@ glm::mat4 shear(bool unshear) {
 	glm::mat4 vector_mat = glm::make_mat4(vector_);
 	return vector_mat;
 }
+
+void applyRotation(glm::mat4 &matrice, float angle_x, float angle_y, float angle_z) {
+	if (angle_x != 0) {
+		matrice = matrice * rotation_x(angle_x);
+	}
+	if (angle_y != 0) {
+		matrice = matrice * rotation_y(angle_y);
+	}
+	if (angle_z != 0) {
+		matrice = matrice * rotation_x(angle_z);
+	}
+}
