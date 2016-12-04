@@ -159,6 +159,6 @@ void applyRotation(glm::mat4 &matrice, float angle_x, float angle_y, float angle
 		matrice = matrice * rotation_y(angle_y);
 	}
 	if (angle_z != 0) {
-		matrice = matrice * rotation_x(angle_z);
+		matrice = matrice * rotation_z(angle_z);
 	}
 }
