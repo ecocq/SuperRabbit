@@ -20,6 +20,7 @@ using namespace glm;
 #include "Camera.h"
 #include "ObjParser.h"
 #include "controls.h"
+#include "PhysicalObject.h"
 
 int main(void)
 {
@@ -31,23 +32,6 @@ int main(void)
 		return -1;
 	}
 
-	std::vector<glm::vec4> geometric_vertex;
-	std::vector<glm::vec3> texture_coords;
-	std::vector<glm::vec3> vertex_normals;
-
-	if (!loadObjFile("obj/Rabbit.obj", geometric_vertex, texture_coords, vertex_normals)) {
-		fprintf(stderr, "Failed to load obj\n");
-		getchar();
-		return -1;
-	}
-
-	std::cout << geometric_vertex.size() << std::endl;
-	std::cout << texture_coords.size() << std::endl;
-	std::cout << vertex_normals.size() << std::endl;
-
-
-	bool textures_coords_valid = (texture_coords.size() > 0 ? true : false );
-	bool normals_valid = (vertex_normals.size() > 0 ? true : false);
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -110,26 +94,11 @@ int main(void)
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
-	// Load it into a VBO
+	PhysicalObject *po = new PhysicalObject("obj/Rabbit.obj");
+	PhysicalObject *poe = new PhysicalObject("obj/Rabbit.obj");
 
-	GLuint vertexbuffer;
-	glGenBuffers(1, &vertexbuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
-
-	GLuint uvbuffer;
-	if (textures_coords_valid) {
-		glGenBuffers(1, &uvbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-		glBufferData(GL_ARRAY_BUFFER, texture_coords.size() * sizeof(glm::vec3), &texture_coords[0], GL_STATIC_DRAW);
-	}
-
-	GLuint normalbuffer;
-	if (normals_valid) {
-		glGenBuffers(1, &normalbuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
-	}
+	po->initialize();
+	poe->initialize();
 
 	//Init camera
 	Camera* cam = new Camera();
@@ -156,8 +125,7 @@ int main(void)
 		cam->execute(window);
 		ProjectionMatrix = cam->getProjection();
 		ViewMatrix = cam->getCamView();
-		MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
-
+		MVP = ProjectionMatrix * ViewMatrix * glm::mat4(1.0);
 
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
@@ -169,72 +137,21 @@ int main(void)
 		// Set our "myTextureSampler" sampler to user Texture Unit 0
 		glUniform1i(TextureID, 0);
 
-		// 1rst attribute buffer : vertices
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-		glVertexAttribPointer(
-			0,                  // attribute
-			4,                  // size
-			GL_FLOAT,           // type
-			GL_FALSE,           // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
-
-		// 2nd attribute buffer : UVs
-		if (textures_coords_valid) {
-			glEnableVertexAttribArray(1);
-			glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-			glVertexAttribPointer(
-				1,                                // attribute
-				3,                                // size
-				GL_FLOAT,                         // type
-				GL_FALSE,                         // normalized?
-				0,                                // stride
-				(void*)0                          // array buffer offset
-			);
-		}
-
-		if (normals_valid) {
-			glEnableVertexAttribArray(2);
-			glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-			glVertexAttribPointer(
-				2,                                // attribute
-				3,                                // size
-				GL_FLOAT,                         // type
-				GL_FALSE,                         // normalized?
-				0,                                // stride
-				(void*)0                          // array buffer offset
-			);
-		}
-
-
-		//Apply transformations on all points
-		for each(vec4 point in geometric_vertex) {
-			point = point * ModelMatrix;
-		}
-
-		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
-
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
+		po->execute(ModelMatrix);
+		poe->execute();
 
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
+		ModelMatrix = glm::mat4(1.0);
+
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
-
-	// Cleanup VBO and shader
-	glDeleteBuffers(1, &vertexbuffer);
-	if (textures_coords_valid) {
-		glDeleteBuffers(1, &uvbuffer);
-	}
 	
+	delete(po);
+	delete(poe);
 	glDeleteProgram(programID);
 	glDeleteTextures(1, &TextureID);
 	glDeleteVertexArrays(1, &VertexArrayID);
