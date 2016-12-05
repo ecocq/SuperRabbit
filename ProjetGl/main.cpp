@@ -19,7 +19,7 @@ using namespace glm;
 #include <common/texture.hpp>
 #include "Camera.h"
 #include "ObjParser.h"
-#include "transformation_mat.h"
+#include "controls.h"
 
 int main(void)
 {
@@ -134,11 +134,12 @@ int main(void)
 	//Init camera
 	Camera* cam = new Camera();
 	cam->execute(window);
-	glm::mat4 ProjectionMatrix = cam->getProjection();
-	glm::mat4 ViewMatrix = cam->getCamView();
-	glm::mat4 ModelMatrix = glm::mat4(1.0);
-	glm::mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
+	glm::mat4 ProjectionMatrix;
+	glm::mat4 ViewMatrix;
+	glm::mat4 MVP;
 
+	//Init the model matrix
+	glm::mat4 ModelMatrix = glm::mat4(1.0);
 
 	do {
 
@@ -148,21 +149,14 @@ int main(void)
 		// Use our shader
 		glUseProgram(programID);
 
+		// Compute the model matrix from keyboard and mouse input
+		applyTransformsFromControls(window, ModelMatrix);
+
 		//Cam
 		cam->execute(window);
-		//TODO see how to replace this code to work well (cam + transformations):
-		/*ProjectionMatrix = cam->getProjection();
+		ProjectionMatrix = cam->getProjection();
 		ViewMatrix = cam->getCamView();
-		MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;*/
-
-		// Compute the MVP matrix from keyboard and mouse input
-		//Apply transformations -- to put in another function after testing ;)
-		if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-			applyRotation(MVP, 5, 0,0);
-		}
-		if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-			applyRotation(MVP, 0, 2, 0);
-		}
+		MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 
 
 		// Send our transformation to the currently bound shader, 
@@ -217,7 +211,7 @@ int main(void)
 
 		//Apply transformations on all points
 		for each(vec4 point in geometric_vertex) {
-			point = point * MVP;
+			point = point * ModelMatrix;
 		}
 
 		// Draw the triangle !
