@@ -185,6 +185,7 @@
     <ClCompile Include="controls.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjParser.cpp" />
+    <ClCompile Include="PhysicalObject.cpp" />
     <ClCompile Include="transformations_mat.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,7 @@
     <ClInclude Include="controls.h" />
     <ClInclude Include="inputKeys.h" />
     <ClInclude Include="ObjParser.h" />
+    <ClInclude Include="PhysicalObject.h" />
     <ClInclude Include="transformation_mat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
