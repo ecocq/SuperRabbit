@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "transformation_mat.h"
-
-#define PI 3.14159265
 
 glm::mat4 translation(glm::vec3 trans) {
 	float trans_[16] = {
@@ -149,4 +140,53 @@ glm::mat4 shear(bool unshear) {
 	};
 	glm::mat4 vector_mat = glm::make_mat4(vector_);
 	return vector_mat;
+}
+
+/* --------------------- */
+
+void applyRotation(glm::mat4 &matrice, float angle_x, float angle_y, float angle_z) {
+	if (angle_x != 0) {
+		matrice = matrice * rotation_x(angle_x);
+	}
+	if (angle_y != 0) {
+		matrice = matrice * rotation_y(angle_y);
+	}
+	if (angle_z != 0) {
+		matrice = matrice * rotation_z(angle_z);
+	}
+}
+
+void applyRotationAroundAxis(glm::mat4 &matrice, float angle_d, glm::vec3 vect) {
+	matrice = matrice * rotation_around_axis(angle_d, vect);
+}
+
+void applyScale(glm::mat4 &matrice, glm::vec3 vector) {
+	matrice = matrice * scale(vector);
+}
+
+void applyScaleAlongAxis(glm::mat4 &matrice, float k, glm::vec3 axis) {
+	matrice = matrice * scale_along_axis(k, axis);
+}
+
+void applyOrthographicProjection(glm::mat4 &matrice, glm::vec3 axis) {
+	matrice = matrice * orthographic_projection(axis);
+}
+
+void applyReflection(glm::mat4 &matrice, glm::vec3 axis) {
+	matrice = matrice * reflection(axis);
+}
+void applyShearOrNot(glm::mat4 &matrice, bool unshear) {
+	matrice = matrice * shear(unshear);
+}
+
+void applyShearingXY(glm::mat4 &matrice, float s, float t) {
+	matrice = matrice * shearing_xy(s, t);
+}
+
+void applyShearingXZ(glm::mat4 &matrice, float s, float t) {
+	matrice = matrice * shearing_xz(s, t);
+}
+
+void applyShearingYZ(glm::mat4 &matrice, float s, float t) {
+	matrice = matrice * shearing_yz(s, t);
 }
