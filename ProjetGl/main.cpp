@@ -125,7 +125,6 @@ int main(void)
 		ViewMatrix = cam->getCamView();
 		MVP = ProjectionMatrix * ViewMatrix * glm::mat4(1.0);
 
-
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
@@ -141,6 +140,8 @@ int main(void)
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		ModelMatrix = glm::mat4(1.0);
 
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&

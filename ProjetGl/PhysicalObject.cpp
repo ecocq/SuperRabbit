@@ -53,6 +53,7 @@ int PhysicalObject::execute(glm::mat4 ModelMatrix) {
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
 	glVertexAttribPointer(
 		0,                  // attribute
 		4,                  // size
@@ -91,8 +92,8 @@ int PhysicalObject::execute(glm::mat4 ModelMatrix) {
 
 
 	//Apply transformations on all points
-	for each(glm::vec4 point in geometric_vertex) {
-		point = point * ModelMatrix;
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
 	}
 
 	// Draw the triangle !
