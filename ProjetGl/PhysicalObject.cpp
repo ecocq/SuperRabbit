@@ -48,7 +48,7 @@ int PhysicalObject::initialize() {
 	return 0;
 }
 
-int PhysicalObject::execute(glm::mat4 ModelMatrix = glm::mat4(1.0)) {
+int PhysicalObject::execute(glm::mat4 ModelMatrix) {
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);

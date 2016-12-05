@@ -19,7 +19,7 @@ public:
 	PhysicalObject(const char* objName);
 
 	int initialize();
-	int execute(glm::mat4 ModelMatrix);
+	int execute(glm::mat4 ModelMatrix = glm::mat4(1.0));
 
 	~PhysicalObject();
 };

@@ -95,8 +95,10 @@ int main(void)
 	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
 	PhysicalObject *po = new PhysicalObject("obj/Rabbit.obj");
+	PhysicalObject *poe = new PhysicalObject("obj/Rabbit.obj");
 
 	po->initialize();
+	poe->initialize();
 
 	//Init camera
 	Camera* cam = new Camera();
@@ -136,6 +138,7 @@ int main(void)
 		glUniform1i(TextureID, 0);
 
 		po->execute(ModelMatrix);
+		poe->execute();
 
 		// Swap buffers
 		glfwSwapBuffers(window);
