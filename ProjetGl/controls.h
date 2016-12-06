@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <glfw3.h>
 
+//TODO REMOVE FILE IF APPROUVED
+
 void applyTransformsFromControls(GLFWwindow* window, glm::mat4 &matrice);
 
 
