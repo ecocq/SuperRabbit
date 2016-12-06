@@ -26,6 +26,7 @@ public:
 
 	int initialize();
 	int execute();
+	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
 	virtual void applyTransformsFromControls();
 
 	~PhysicalObject();

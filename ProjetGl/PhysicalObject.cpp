@@ -125,6 +125,20 @@ PhysicalObject::~PhysicalObject()
 	}
 }
 
+/* Init transforms - put null if not needed */
+void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
+	if (rotate != glm::vec3(0, 0, 0)) {
+		applyRotation(ModelMatrix, rotate.x, rotate.y, rotate.z);
+	}
+	if (translate != glm::vec3(0, 0, 0)) {
+		applyTranslation(ModelMatrix, translate);
+	}
+	//Apply transformations on all points
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
+	}
+}
+
 /* This function will be a default control transforms function
 We should use inheritance to redefine according to objects behaviors */
 void PhysicalObject::applyTransformsFromControls() {
@@ -134,6 +148,19 @@ void PhysicalObject::applyTransformsFromControls() {
 
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
 		applyRotation(ModelMatrix, 0, 2, 0);
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+		applyTranslation(ModelMatrix, glm::vec3(-0.2,0,0));
+	}
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
+		applyTranslation(ModelMatrix, glm::vec3(0, -0.2, 0));
+	}
+	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+		applyTranslation(ModelMatrix, glm::vec3(0.2, 0, 0));
+	}
+	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
+		applyTranslation(ModelMatrix, glm::vec3(0, 0.2, 0));
 	}
 
 	//Apply when click and move mouse?
