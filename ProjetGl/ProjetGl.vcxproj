@@ -207,6 +207,7 @@
   <ItemGroup>
     <None Include="shader\Redcolor.fragmentshader" />
     <None Include="shader\Redcolor.vertexshader" />
+    <None Include="shader\TransformVertexShader.vertexshader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

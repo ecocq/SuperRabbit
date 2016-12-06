@@ -115,5 +115,8 @@
     <None Include="shader\Redcolor.fragmentshader">
       <Filter>Fichiers sources\shader</Filter>
     </None>
+    <None Include="shader\TransformVertexShader.vertexshader">
+      <Filter>Fichiers sources\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
