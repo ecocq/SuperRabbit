@@ -93,10 +93,13 @@ int main(void)
 	GLuint Texture = loadDDS("obj/wolf-obj.mtl");
 
 	// Get a handle for our "myTextureSampler" uniform
-	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
+	// GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
-	PhysicalObject *po = new PhysicalObject("obj/Rabbit.obj");
-	PhysicalObject *poe = new PhysicalObject("obj/Rabbit.obj");
+	// Get a handle for our "fragmentColor" uniform
+	GLuint fragColor = glGetUniformLocation(programID, "m_fragColor");
+
+	PhysicalObject *po = new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor);
+	PhysicalObject *poe = new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 0.0f), fragColor);
 
 	po->initialize();
 	poe->initialize();
@@ -136,8 +139,8 @@ int main(void)
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, Texture);
 		// Set our "myTextureSampler" sampler to user Texture Unit 0
-		glUniform1i(TextureID, 0);
-
+		// glUniform1i(TextureID, 0);
+		
 		po->execute(ModelMatrix);
 		poe->execute();
 
@@ -154,7 +157,7 @@ int main(void)
 	delete(po);
 	delete(poe);
 	glDeleteProgram(programID);
-	glDeleteTextures(1, &TextureID);
+	// glDeleteTextures(1, &TextureID);
 	glDeleteVertexArrays(1, &VertexArrayID);
 
 	// Close OpenGL window and terminate GLFW

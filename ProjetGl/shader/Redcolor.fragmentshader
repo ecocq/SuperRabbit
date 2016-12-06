@@ -5,6 +5,9 @@ in vec3 fragmentColor;
 // Output data; correspond to vertex color
 out vec3 color;
 
+uniform vec3 m_fragColor;
+
+
 void main(){
-	color = vec3(1.0f, 0.0f, 0.0f);
+	color = m_fragColor;
 }

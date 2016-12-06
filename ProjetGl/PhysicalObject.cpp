@@ -12,9 +12,11 @@
 #include "PhysicalObject.h"
 #include "ObjParser.h"
 
-PhysicalObject::PhysicalObject(const char* objName)
+PhysicalObject::PhysicalObject(const char* objName, glm::vec3 objcolor, GLuint fragShader)
 {
 	ObjName = objName;
+	m_color = objcolor;
+	fragmentShader = fragShader;
 }
 
 int PhysicalObject::initialize() {
@@ -49,6 +51,7 @@ int PhysicalObject::initialize() {
 }
 
 int PhysicalObject::execute(glm::mat4 ModelMatrix) {
+	glUniform3fv(fragmentShader, 1, &m_color[0]);
 
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
@@ -115,4 +118,8 @@ PhysicalObject::~PhysicalObject()
 	if (textures_coords_valid) {
 		glDeleteBuffers(1, &uvbuffer);
 	}
+}
+
+glm::vec3 PhysicalObject::getColor() {
+	return m_color;
 }
