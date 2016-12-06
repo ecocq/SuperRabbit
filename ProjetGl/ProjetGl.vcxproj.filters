@@ -109,13 +109,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\Redcolor.vertexshader">
-      <Filter>Fichiers sources\shader</Filter>
-    </None>
-    <None Include="shader\Redcolor.fragmentshader">
-      <Filter>Fichiers sources\shader</Filter>
-    </None>
     <None Include="shader\TransformVertexShader.vertexshader">
+      <Filter>Fichiers sources\shader</Filter>
+    </None>
+    <None Include="shader\Color.fragmentshader">
       <Filter>Fichiers sources\shader</Filter>
     </None>
   </ItemGroup>

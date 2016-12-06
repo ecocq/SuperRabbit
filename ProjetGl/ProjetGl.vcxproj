@@ -205,8 +205,7 @@
     <ClInclude Include="transformation_mat.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\Redcolor.fragmentshader" />
-    <None Include="shader\Redcolor.vertexshader" />
+    <None Include="shader\Color.fragmentshader" />
     <None Include="shader\TransformVertexShader.vertexshader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
