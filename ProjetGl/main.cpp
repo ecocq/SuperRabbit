@@ -88,6 +88,7 @@ int main(void)
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 
 	// Load the texture
+	//---------------------------------------- TODO REMOVE ????
 	GLuint Texture = loadDDS("obj/wolf-obj.mtl");
 
 	// Get a handle for our "myTextureSampler" uniform
