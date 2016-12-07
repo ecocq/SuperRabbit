@@ -19,7 +19,6 @@ using namespace glm;
 #include <common/texture.hpp>
 #include "Camera.h"
 #include "ObjParser.h"
-#include "controls.h"
 #include "PhysicalObject.h"
 
 int main(void)
@@ -89,16 +88,19 @@ int main(void)
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 
 	// Load the texture
+	//---------------------------------------- TODO REMOVE ????
 	GLuint Texture = loadDDS("obj/wolf-obj.mtl");
 
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
-	PhysicalObject *po = new PhysicalObject("obj/Rabbit.obj");
-	PhysicalObject *poe = new PhysicalObject("obj/Rabbit.obj");
+	//Init objects
+	PhysicalObject *obj_rabbit = new PhysicalObject("obj/Rabbit.obj", window);
+	PhysicalObject *obj_rabbit2 = new PhysicalObject("obj/Rabbit.obj", window);
 
-	po->initialize();
-	poe->initialize();
+	obj_rabbit->initialize();
+	obj_rabbit2->initialize();
+	obj_rabbit2->initTransforms(glm::vec3(0, 0, -1.5), glm::vec3(0, 90, 0));
 
 	//Init camera
 	Camera* cam = new Camera();
@@ -107,8 +109,6 @@ int main(void)
 	glm::mat4 ViewMatrix;
 	glm::mat4 MVP;
 
-	//Init the model matrix
-	glm::mat4 ModelMatrix = glm::mat4(1.0);
 
 	do {
 
@@ -117,9 +117,6 @@ int main(void)
 
 		// Use our shader
 		glUseProgram(programID);
-
-		// Compute the model matrix from keyboard and mouse input
-		applyTransformsFromControls(window, ModelMatrix);
 
 		//Cam
 		cam->execute(window);
@@ -137,21 +134,19 @@ int main(void)
 		// Set our "myTextureSampler" sampler to user Texture Unit 0
 		glUniform1i(TextureID, 0);
 
-		po->execute(ModelMatrix);
-		poe->execute();
+		obj_rabbit->execute();
+		obj_rabbit2->execute();
 
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
-		ModelMatrix = glm::mat4(1.0);
-
 	} // Check if the ESC key was pressed or the window was closed
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
 	
-	delete(po);
-	delete(poe);
+	delete(obj_rabbit);
+	delete(obj_rabbit2);
 	glDeleteProgram(programID);
 	glDeleteTextures(1, &TextureID);
 	glDeleteVertexArrays(1, &VertexArrayID);

@@ -2,6 +2,9 @@
 
 /* These controls must be changed to fit with our game later */
 
+
+//TODO REMOVE FILE IF APPROUVED
+
 void applyTransformsFromControls(GLFWwindow* window, glm::mat4 &matrice)
 {
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
