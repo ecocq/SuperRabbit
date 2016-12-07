@@ -28,6 +28,7 @@ glm::mat4 shearing_xy(float s, float t);
 glm::mat4 shearing_xz(float s, float t);
 glm::mat4 shearing_yz(float s, float t);
 
+void applyTranslation(glm::mat4 &matrice, glm::vec3 trans);
 void applyRotation(glm::mat4 &matrice, float angle_x, float angle_y, float angle_z);
 void applyRotationAroundAxis(glm::mat4 &matrice, float angle_d, glm::vec3 vect);
 void applyScale(glm::mat4 &matrice, glm::vec3 vector);

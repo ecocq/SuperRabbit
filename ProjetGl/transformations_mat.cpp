@@ -144,6 +144,10 @@ glm::mat4 shear(bool unshear) {
 
 /* --------------------- */
 
+void applyTranslation(glm::mat4 &matrice, glm::vec3 trans) {
+	matrice = matrice * translation(trans);
+}
+
 void applyRotation(glm::mat4 &matrice, float angle_x, float angle_y, float angle_z) {
 	if (angle_x != 0) {
 		matrice = matrice * rotation_x(angle_x);

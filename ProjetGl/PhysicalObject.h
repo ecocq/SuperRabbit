@@ -1,7 +1,11 @@
 #pragma once
+#include "transformation_mat.h"
+
 class PhysicalObject
 {
 private:
+	GLFWwindow* window;
+
 	GLuint vertexbuffer;
 	GLuint uvbuffer;
 	GLuint normalbuffer;
@@ -12,17 +16,20 @@ private:
 	std::vector<glm::vec3> vertex_normals;
 	glm::vec3 m_color;
 
+	glm::mat4 ModelMatrix;
+
 	bool textures_coords_valid;
 	bool normals_valid;
 
-	const char* ObjName;
+	const char* ObjPath;
 
 public:
-	PhysicalObject(const char* objName, glm::vec3 objcolor, GLuint fragShader);
+	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
 
 	int initialize();
-	int execute(glm::mat4 ModelMatrix = glm::mat4(1.0));
-	glm::vec3 getColor();
+	int execute();
+	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
+	virtual void applyTransformsFromControls();
 
 	~PhysicalObject();
 };
