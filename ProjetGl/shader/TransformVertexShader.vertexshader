@@ -1,20 +1,43 @@
 #version 330 core
 
-// Input vertex data, different for all executions of this shader.
-layout(location = 0) in vec3 vertexPosition_modelspace;
-layout(location = 1) in vec2 vertexUV;
+layout(location = 0) in vec4 vertexPosition_object;
+layout(location = 1) in vec3 vertexUV;
+layout(location = 2) in vec3 vertexNormal_object;
 
-// Output data ; will be interpolated for each fragment.
-out vec2 UV;
+out vec3 UV;
+out vec4 vertexPosition_world;
+out vec4 EyeDirection_camera;
+out vec4 LightDirection_camera;
+out vec4 Normal_camera;
 
-// Values that stay constant for the whole mesh.
 uniform mat4 MVP;
+uniform mat4 View_matrix;
 
 void main(){
 
-	// Output position of the vertex, in clip space : MVP * position
-	gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
+
+	gl_Position =  MVP * vertexPosition_object;
 	
-	// UV of the vertex. No special space for this one.
 	UV = vertexUV;
+
+	// Model matrix. Better if it was an argument
+	mat4 model = mat4(
+	1.0, 0.0, 0.0, 0.0, 
+	0.0, 1.0, 0.0, 0.0, 
+	0.0, 0.0, 1.0, 0.0, 
+	0.0, 0.0, 0.0, 1.0
+	);
+
+	// Vertex position in world space
+	vertexPosition_world = model * vertexPosition_object;
+
+	vec4 vertexPosition_camera = View_matrix * model * vertexPosition_object;
+	EyeDirection_camera = vec4(0,0,0, 0) - vertexPosition_camera;
+
+	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
+	vec4 LightPosition_camera = View_matrix * vec4(0,10,0,1);
+    LightDirection_camera = LightPosition_camera + EyeDirection_camera;
+
+	// Normal of the the vertex, in camera space
+	Normal_camera = View_matrix * model * vec4(vertexNormal_object,0); 
 }

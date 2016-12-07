@@ -86,8 +86,9 @@ int main(void)
 	GLuint programID = LoadShaders("shader/TransformVertexShader.vertexshader", "shader/Color.fragmentshader");
 	
 
-	// Get a handle for our "MVP" uniform
+	// Get a handle for our "MVP" and "View"  uniform
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+	GLuint ViewID = glGetUniformLocation(programID, "View_matrix");
 
 	// Load the texture
 	GLuint Texture = loadDDS("obj/wolf-obj.mtl");
@@ -134,6 +135,7 @@ int main(void)
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+		glUniformMatrix4fv(ViewID, 1, GL_FALSE, &ViewMatrix[0][0]);
 
 		// Bind our texture in Texture Unit 0
 		glActiveTexture(GL_TEXTURE0);
