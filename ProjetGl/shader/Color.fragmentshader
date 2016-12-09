@@ -15,7 +15,7 @@ void main(){
 	// Light emission definition. Can be moved to C++
 	vec3 LightColor = vec3(1,1,1);
 	float LightPower = 50.0f;
-	vec4 LightPosition = vec4(0,10,0,1);
+	vec4 LightPosition = vec4(0,5,0,1);
 
 	// Material properties
 	vec3 MaterialDiffuseColor = m_fragColor;

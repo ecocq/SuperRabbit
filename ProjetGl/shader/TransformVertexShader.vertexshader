@@ -35,7 +35,7 @@ void main(){
 	EyeDirection_camera = vec4(0,0,0, 0) - vertexPosition_camera;
 
 	// Vector that goes from the vertex to the light, in camera space. M is ommited because it's identity.
-	vec4 LightPosition_camera = View_matrix * vec4(0,10,0,1);
+	vec4 LightPosition_camera = View_matrix * vec4(0,5,0,1);
     LightDirection_camera = LightPosition_camera + EyeDirection_camera;
 
 	// Normal of the the vertex, in camera space
