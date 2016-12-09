@@ -18,11 +18,25 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	m_color = objcolor;
 	fragmentShader = fragShader;
 	window = Objwindow;
+	position = glm::vec3(0, 0, 0);
 }
+
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow)
+{
+	position = initialPos;
+}
+
 
 PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject("NONE", objcolor, fragShader, Objwindow)
 {
 	geometric_vertex = _geometric_vertex;
+}
+
+void PhysicalObject::fix_vertex() {
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+	}
+
 }
 
 int PhysicalObject::initialize() {
@@ -34,6 +48,10 @@ int PhysicalObject::initialize() {
 	}
 	else if (ObjPath == "NONE") {
 
+	}
+	if (position != glm::vec3(0,0,0)) {
+		ModelMatrix = glm::mat4(1.0) * translation(position);
+		fix_vertex();
 	}
 
 	textures_coords_valid = (texture_coords.size() > 0 ? true : false);
@@ -112,9 +130,7 @@ int PhysicalObject::execute() {
 
 	//Apply transformations on all points
 	if (ModelMatrix != glm::mat4(1.0)) {
-		for (int i = 0; i < geometric_vertex.size(); i++) {
-			geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-		}
+		fix_vertex();
 	}
 	
 

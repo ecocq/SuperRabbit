@@ -29,9 +29,11 @@ protected:
 public:
 	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
 	PhysicalObject(std::vector<glm::vec4> geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
+	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos);
 
 	int initialize();
 	int execute();
+	void fix_vertex();
 	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
 	virtual void applyTransformsFromControls();
 	void applyTranslation(glm::vec3 trans);

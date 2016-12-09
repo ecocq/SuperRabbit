@@ -102,10 +102,9 @@ int main(void)
 
 	//Init objects
 	std::vector<PhysicalObject*> objects;
-	PhysicalObject *obj_rabbit = new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
-	PhysicalObject *wall = new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
-	objects.push_back(obj_rabbit);
-	objects.push_back(wall);
+	objects.push_back(new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window));
+	objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window, glm::vec3(0, 0, -10)));
+	
 
 	for (int i = 0; i < objects.size(); i++)
 	{
