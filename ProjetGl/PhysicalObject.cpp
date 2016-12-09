@@ -101,9 +101,12 @@ int PhysicalObject::execute() {
 
 
 	//Apply transformations on all points
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
+	if (ModelMatrix != glm::mat4(1.0)) {
+		for (int i = 0; i < geometric_vertex.size(); i++) {
+			geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
+		}
 	}
+	
 
 	// Draw the triangle !
 	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
@@ -128,8 +131,19 @@ PhysicalObject::~PhysicalObject()
 
 /* Init transforms - put null if not needed */
 void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
+	glEnableVertexAttribArray(0);
+	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
+
 	if (rotate != glm::vec3(0, 0, 0)) {
-		applyRotation(rotate.x, rotate.y, rotate.z);
+		if (rotate.x != 0) {
+			ModelMatrix = ModelMatrix * rotation_x(rotate.x);
+		}
+		if (rotate.y != 0) {
+			ModelMatrix = ModelMatrix * rotation_y(rotate.y);
+		}
+		if (rotate.z != 0) {
+			ModelMatrix = ModelMatrix * rotation_z(rotate.z);
+		}
 	}
 	if (translate != glm::vec3(0, 0, 0)) {
 		applyTranslation(translate);
@@ -138,6 +152,11 @@ void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
 	}
+	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
+
+	glDisableVertexAttribArray(0);
+
+	ModelMatrix = glm::mat4(1.0);
 }
 
 /* This function will be a default control transforms function
@@ -148,7 +167,7 @@ void PhysicalObject::applyTransformsFromControls() {
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-		applyRotation(0, 2, 0);
+			applyRotation(0, 2, 0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
@@ -200,10 +219,19 @@ void PhysicalObject::applyTransformsFromControls() {
 /* --- Apply Transformations --- */
 
 void PhysicalObject::applyTranslation(glm::vec3 trans) {
+	translated = translated + trans;
+	std::cout << translated.x << "," << translated.y << "," << translated.z << std::endl;
 	ModelMatrix = ModelMatrix * translation(trans);
 }
 
 void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) {
+	/*
+	std::cout << "Avant trans : " << geometric_vertex[2][2] << std::endl;
+	ModelMatrix = translation(-translated);
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = translation(-translated) * geometric_vertex[i];
+	}
+	std::cout << "Apres trans " << geometric_vertex[2][2] << std::endl;*/
 	if (angle_x != 0) {
 		ModelMatrix = ModelMatrix * rotation_x(angle_x);
 	}
@@ -212,7 +240,15 @@ void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) 
 	}
 	if (angle_z != 0) {
 		ModelMatrix = ModelMatrix * rotation_z(angle_z);
+	}/*
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
 	}
+	std::cout << "Apres Modele" << geometric_vertex[2][2] << std::endl;
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = translation(-translated) * geometric_vertex[i];
+	}
+	std::cout << "Après trans" << geometric_vertex[2][2] << std::endl;*/
 }
 
 void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
