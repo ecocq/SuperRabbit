@@ -1,9 +1,9 @@
 #pragma once
-#include "transformation_mat.h"
+#include <vector>
 
 class PhysicalObject
 {
-private:
+protected:
 	GLFWwindow* window;
 
 	GLuint vertexbuffer;
@@ -26,6 +26,7 @@ private:
 
 public:
 	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
+	PhysicalObject(std::vector<glm::vec4> geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
 
 	int initialize();
 	int execute();
