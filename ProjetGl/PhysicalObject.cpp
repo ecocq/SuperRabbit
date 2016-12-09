@@ -12,17 +12,31 @@
 #include "transformation_mat.h"
 
 
-PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow)
-{
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::mat4 initialTrans){
 	ObjPath = path;
 	m_color = objcolor;
 	fragmentShader = fragShader;
 	window = Objwindow;
+	position = glm::vec3(0, 0, 0);
+	ModelMatrix = initialTrans;
 }
+
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, translation(initialPos))
+{
+	position = initialPos;
+}
+
 
 PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject("NONE", objcolor, fragShader, Objwindow)
 {
 	geometric_vertex = _geometric_vertex;
+}
+
+void PhysicalObject::fix_vertex() {
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+	}
+
 }
 
 int PhysicalObject::initialize() {
@@ -34,6 +48,9 @@ int PhysicalObject::initialize() {
 	}
 	else if (ObjPath == "NONE") {
 
+	}
+	if (ModelMatrix != glm::mat4(1.0)) {
+		fix_vertex();
 	}
 
 	textures_coords_valid = (texture_coords.size() > 0 ? true : false);
@@ -57,7 +74,7 @@ int PhysicalObject::initialize() {
 
 	ModelMatrix = glm::mat4(1.0);
 	translated = glm::vec3(0);
-	
+
 	return 0;
 }
 
@@ -112,11 +129,9 @@ int PhysicalObject::execute() {
 
 	//Apply transformations on all points
 	if (ModelMatrix != glm::mat4(1.0)) {
-		for (int i = 0; i < geometric_vertex.size(); i++) {
-			geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-		}
+		fix_vertex();
 	}
-	
+
 
 	// Draw the triangle !
 	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
@@ -186,64 +201,61 @@ void PhysicalObject::applyTranslation(glm::vec3 trans) {
 }
 
 void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) {
-	
-	/*std::cout << "Avant trans : " << geometric_vertex[2][2] << std::endl;
-	ModelMatrix = translation(-translated);
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-	}
-	std::cout << "Apres trans " << geometric_vertex[2][2] << std::endl;
-	*/
+	glm::mat4 rotationMatrix(1.0);
 	if (angle_x != 0) {
-		ModelMatrix = ModelMatrix * rotation_x(angle_x);
+		rotationMatrix = rotationMatrix * rotation_x(angle_x);
 	}
 	if (angle_y != 0) {
-		ModelMatrix = ModelMatrix * rotation_y(angle_y);
+		rotationMatrix = rotationMatrix * rotation_y(angle_y);
 	}
 	if (angle_z != 0) {
-		ModelMatrix = ModelMatrix * rotation_z(angle_z);
+		rotationMatrix = rotationMatrix * rotation_z(angle_z);
 	}
-	/*
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-	}
-	std::cout << "Apres Modele" << geometric_vertex[2][2] << std::endl;
-	ModelMatrix = translation(-translated) * ModelMatrix;
-	std::cout << "Après trans" << geometric_vertex[2][2] << std::endl;
-	*/
+
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * rotationMatrix * translation(-pos);
 }
 
 void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
-	ModelMatrix = ModelMatrix * rotation_around_axis(angle_d, vect);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * rotation_around_axis(angle_d, vect) * translation(-pos);
 }
 
 void PhysicalObject::applyScale(glm::vec3 vector) {
-	ModelMatrix = ModelMatrix * scale(vector);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * scale(vector) * translation(-pos);
 }
 
 void PhysicalObject::applyScaleAlongAxis(float k, glm::vec3 axis) {
-	ModelMatrix = ModelMatrix * scale_along_axis(k, axis);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * scale_along_axis(k, axis) * translation(-pos);
 }
 
 void PhysicalObject::applyOrthographicProjection(glm::vec3 axis) {
-	ModelMatrix = ModelMatrix * orthographic_projection(axis);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * orthographic_projection(axis) * translation(-pos);
 }
 
 void PhysicalObject::applyReflection(glm::vec3 axis) {
-	ModelMatrix = ModelMatrix * reflection(axis);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * reflection(axis) * translation(-pos);
 }
 void PhysicalObject::applyShearOrNot(bool unshear) {
-	ModelMatrix = ModelMatrix * shear(unshear);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * shear(unshear) * translation(-pos);
 }
 
 void PhysicalObject::applyShearingXY(float s, float t) {
-	ModelMatrix = ModelMatrix * shearing_xy(s, t);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * shearing_xy(s, t) * translation(-pos);
 }
 
 void PhysicalObject::applyShearingXZ(float s, float t) {
-	ModelMatrix = ModelMatrix * shearing_xz(s, t);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * shearing_xz(s, t) * translation(-pos);
 }
 
 void PhysicalObject::applyShearingYZ(float s, float t) {
-	ModelMatrix = ModelMatrix * shearing_yz(s, t);
+	glm::vec3 pos = position + translated;
+	ModelMatrix = ModelMatrix * translation(pos) * shearing_yz(s, t) * translation(-pos);
 }
