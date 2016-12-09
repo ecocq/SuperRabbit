@@ -105,7 +105,7 @@ int main(void)
 
 	obj_rabbit->initialize();
 	obj_rabbit2->initialize();
-	obj_rabbit2->initTransforms(glm::vec3(0, 0, -1.5), glm::vec3(0, 90, 0));
+	obj_rabbit2->initTransforms(glm::vec3(1.5, 0, 0), glm::vec3(0, 90, 0));
 
 	//Init camera
 	Camera* cam = new Camera();

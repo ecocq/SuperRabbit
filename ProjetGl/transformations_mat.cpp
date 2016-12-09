@@ -2,10 +2,10 @@
 
 glm::mat4 translation(glm::vec3 trans) {
 	float trans_[16] = {
-		1, 0, 0, trans.x,
-		0, 1, 0, trans.y,
-		0, 0, 1, trans.z,
-		0, 0, 0, 1
+		1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		trans.x, trans.y, trans.z, 1
 	};
 	glm::mat4 trans_mat = glm::make_mat4(trans_);
 	return trans_mat;
@@ -15,8 +15,8 @@ glm::mat4 rotation_x(float angle_d) {
 	float angle = angle_d * PI / 180.0f;
 	float rot_[16] = {
 		1, 0, 0, 0,
-		0, cos(angle), sin(angle), 0,
-		0, -sin(angle), cos(angle), 0,
+		0, cos(angle), -sin(angle), 0,
+		0, sin(angle), cos(angle), 0,
 		0, 0, 0, 1
 	};
 	glm::mat4 rot_mat = glm::make_mat4(rot_);
@@ -26,9 +26,9 @@ glm::mat4 rotation_x(float angle_d) {
 glm::mat4 rotation_y(float angle_d) {
 	float angle = angle_d * PI / 180.0;
 	float rot_[16] = {
-		cos(angle), 0, -sin(angle), 0,
+		cos(angle), 0, sin(angle), 0,
 		0, 1, 0, 0,
-		sin(angle), 0, cos(angle), 0,
+		-sin(angle), 0, cos(angle), 0,
 		0, 0, 0, 1
 	};
 	glm::mat4 rot_mat = glm::make_mat4(rot_);
@@ -38,8 +38,8 @@ glm::mat4 rotation_y(float angle_d) {
 glm::mat4 rotation_z(float angle_d) {
 	float angle = angle_d * PI / 180.0;
 	float rot_[16] = {
-		cos(angle), -sin(angle), 0, 0,
-		sin(angle), cos(angle), 0, 0,
+		cos(angle), sin(angle), 0, 0,
+		-sin(angle), cos(angle), 0, 0,
 		0, 0, 1, 0,
 		0, 0, 0, 1
 	};
@@ -142,55 +142,4 @@ glm::mat4 shear(bool unshear) {
 	return vector_mat;
 }
 
-/* --------------------- */
 
-void applyTranslation(glm::mat4 &matrice, glm::vec3 trans) {
-	matrice = matrice * translation(trans);
-}
-
-void applyRotation(glm::mat4 &matrice, float angle_x, float angle_y, float angle_z) {
-	if (angle_x != 0) {
-		matrice = matrice * rotation_x(angle_x);
-	}
-	if (angle_y != 0) {
-		matrice = matrice * rotation_y(angle_y);
-	}
-	if (angle_z != 0) {
-		matrice = matrice * rotation_z(angle_z);
-	}
-}
-
-void applyRotationAroundAxis(glm::mat4 &matrice, float angle_d, glm::vec3 vect) {
-	matrice = matrice * rotation_around_axis(angle_d, vect);
-}
-
-void applyScale(glm::mat4 &matrice, glm::vec3 vector) {
-	matrice = matrice * scale(vector);
-}
-
-void applyScaleAlongAxis(glm::mat4 &matrice, float k, glm::vec3 axis) {
-	matrice = matrice * scale_along_axis(k, axis);
-}
-
-void applyOrthographicProjection(glm::mat4 &matrice, glm::vec3 axis) {
-	matrice = matrice * orthographic_projection(axis);
-}
-
-void applyReflection(glm::mat4 &matrice, glm::vec3 axis) {
-	matrice = matrice * reflection(axis);
-}
-void applyShearOrNot(glm::mat4 &matrice, bool unshear) {
-	matrice = matrice * shear(unshear);
-}
-
-void applyShearingXY(glm::mat4 &matrice, float s, float t) {
-	matrice = matrice * shearing_xy(s, t);
-}
-
-void applyShearingXZ(glm::mat4 &matrice, float s, float t) {
-	matrice = matrice * shearing_xz(s, t);
-}
-
-void applyShearingYZ(glm::mat4 &matrice, float s, float t) {
-	matrice = matrice * shearing_yz(s, t);
-}

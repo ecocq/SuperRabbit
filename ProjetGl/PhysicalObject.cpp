@@ -49,6 +49,7 @@ int PhysicalObject::initialize() {
 	}
 
 	ModelMatrix = glm::mat4(1.0);
+	translated = glm::vec3(0);
 	
 	return 0;
 }
@@ -103,9 +104,12 @@ int PhysicalObject::execute() {
 
 
 	//Apply transformations on all points
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
+	if (ModelMatrix != glm::mat4(1.0)) {
+		for (int i = 0; i < geometric_vertex.size(); i++) {
+			geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+		}
 	}
+	
 
 	// Draw the triangle !
 	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
@@ -130,70 +134,159 @@ PhysicalObject::~PhysicalObject()
 
 /* Init transforms  */
 void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
+
 	if (rotate != glm::vec3(0, 0, 0)) {
-		applyRotation(ModelMatrix, rotate.x, rotate.y, rotate.z);
+		if (rotate.x != 0) {
+			ModelMatrix = ModelMatrix * rotation_x(rotate.x);
+		}
+		if (rotate.y != 0) {
+			ModelMatrix = ModelMatrix * rotation_y(rotate.y);
+		}
+		if (rotate.z != 0) {
+			ModelMatrix = ModelMatrix * rotation_z(rotate.z);
+		}
 	}
 	if (translate != glm::vec3(0, 0, 0)) {
-		applyTranslation(ModelMatrix, translate);
+		applyTranslation(translate);
 	}
 	//Apply transformations on all points
 	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
+	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
+
+	glDisableVertexAttribArray(0);
+
+	ModelMatrix = glm::mat4(1.0);
 }
 
 /* This function will be a default control transforms function
 We should use inheritance to redefine according to objects behaviors */
 void PhysicalObject::applyTransformsFromControls() {
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-		applyRotation(ModelMatrix, 5, 0, 0);
+		applyRotation(5, 0, 0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-		applyRotation(ModelMatrix, 0, 2, 0);
+		applyRotation(0, 2, 0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-		applyTranslation(ModelMatrix, glm::vec3(-0.2,0,0));
+		applyTranslation(glm::vec3(0,0,0.2));
 	}
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-		applyTranslation(ModelMatrix, glm::vec3(0, -0.2, 0));
+		applyTranslation(glm::vec3(0, -0.2, 0));
 	}
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-		applyTranslation(ModelMatrix, glm::vec3(0.2, 0, 0));
+		applyTranslation(glm::vec3(0, 0, -0.2));
 	}
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-		applyTranslation(ModelMatrix, glm::vec3(0, 0.2, 0));
+		applyTranslation(glm::vec3(0, 0.2, 0));
 	}
 
 	//Apply when click and move mouse?
 	//applyRotationAroundAxis
 
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-		applyScale(ModelMatrix, glm::vec3(1.2, 1.2, 1.2));
+		applyScale(glm::vec3(1.2, 1.2, 1.2));
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-		applyScale(ModelMatrix, glm::vec3(0.8, 0.8, 0.8));
+		applyScale(glm::vec3(0.8, 0.8, 0.8));
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
-		applyReflection(ModelMatrix, glm::vec3(0, 1, 0));
+		applyReflection(glm::vec3(0, 1, 0));
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-		applyShearingYZ(ModelMatrix, 1.2, -0.5);
+		applyShearingYZ(1.2, -0.5);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
-		applyShearingYZ(ModelMatrix, -1.2, 0.5);
+		applyShearingYZ(-1.2, 0.5);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) {
-		applyShearOrNot(ModelMatrix, true);
+		applyShearOrNot(true);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) {
-		applyShearOrNot(ModelMatrix, false);
+		applyShearOrNot(false);
 	}
+}
+
+
+/* --- Apply Transformations --- */
+
+void PhysicalObject::applyTranslation(glm::vec3 trans) {
+	translated = translated + trans;
+	std::cout << translated.x << "," << translated.y << "," << translated.z << std::endl;
+	ModelMatrix = ModelMatrix * translation(trans);
+}
+
+void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) {
+	
+	/*std::cout << "Avant trans : " << geometric_vertex[2][2] << std::endl;
+	ModelMatrix = translation(-translated);
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+	}
+	std::cout << "Apres trans " << geometric_vertex[2][2] << std::endl;
+	*/
+	if (angle_x != 0) {
+		ModelMatrix = ModelMatrix * rotation_x(angle_x);
+	}
+	if (angle_y != 0) {
+		ModelMatrix = ModelMatrix * rotation_y(angle_y);
+	}
+	if (angle_z != 0) {
+		ModelMatrix = ModelMatrix * rotation_z(angle_z);
+	}
+	/*
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+	}
+	std::cout << "Apres Modele" << geometric_vertex[2][2] << std::endl;
+	ModelMatrix = translation(-translated) * ModelMatrix;
+	std::cout << "Après trans" << geometric_vertex[2][2] << std::endl;
+	*/
+}
+
+void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
+	ModelMatrix = ModelMatrix * rotation_around_axis(angle_d, vect);
+}
+
+void PhysicalObject::applyScale(glm::vec3 vector) {
+	ModelMatrix = ModelMatrix * scale(vector);
+}
+
+void PhysicalObject::applyScaleAlongAxis(float k, glm::vec3 axis) {
+	ModelMatrix = ModelMatrix * scale_along_axis(k, axis);
+}
+
+void PhysicalObject::applyOrthographicProjection(glm::vec3 axis) {
+	ModelMatrix = ModelMatrix * orthographic_projection(axis);
+}
+
+void PhysicalObject::applyReflection(glm::vec3 axis) {
+	ModelMatrix = ModelMatrix * reflection(axis);
+}
+void PhysicalObject::applyShearOrNot(bool unshear) {
+	ModelMatrix = ModelMatrix * shear(unshear);
+}
+
+void PhysicalObject::applyShearingXY(float s, float t) {
+	ModelMatrix = ModelMatrix * shearing_xy(s, t);
+}
+
+void PhysicalObject::applyShearingXZ(float s, float t) {
+	ModelMatrix = ModelMatrix * shearing_xz(s, t);
+}
+
+void PhysicalObject::applyShearingYZ(float s, float t) {
+	ModelMatrix = ModelMatrix * shearing_yz(s, t);
 }

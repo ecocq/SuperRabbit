@@ -17,23 +17,23 @@ Camera::Camera()
 
 void Camera::execute(GLFWwindow *window)
 {
-	glm::vec3 cartesian_dir = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) * rotation_y(angle);
-	glm::vec3 cartesian_dir_right = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f) * rotation_y(angle);
+	glm::vec3 cartesian_dir =  rotation_y(angle) * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	glm::vec3 cartesian_dir_right =  rotation_y(angle) * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		position = position * translation(cartesian_dir * speed);
+		position = translation(cartesian_dir * speed) * position;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		position = position * translation(-cartesian_dir * speed);
+		position = translation(-cartesian_dir * speed) * position;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-		position = position * translation(cartesian_dir_right * speed);
+		position = translation(cartesian_dir_right * speed) * position;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-		position = position * translation(-cartesian_dir_right * speed);
+		position = translation(-cartesian_dir_right * speed) * position;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
