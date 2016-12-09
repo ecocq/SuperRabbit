@@ -12,16 +12,16 @@
 #include "transformation_mat.h"
 
 
-PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow)
-{
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::mat4 initialTrans){
 	ObjPath = path;
 	m_color = objcolor;
 	fragmentShader = fragShader;
 	window = Objwindow;
 	position = glm::vec3(0, 0, 0);
+	ModelMatrix = initialTrans;
 }
 
-PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow)
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, translation(initialPos))
 {
 	position = initialPos;
 }
@@ -49,8 +49,7 @@ int PhysicalObject::initialize() {
 	else if (ObjPath == "NONE") {
 
 	}
-	if (position != glm::vec3(0, 0, 0)) {
-		ModelMatrix = glm::mat4(1.0) * translation(position);
+	if (ModelMatrix != glm::mat4(1.0)) {
 		fix_vertex();
 	}
 
