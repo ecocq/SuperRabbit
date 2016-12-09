@@ -9,10 +9,12 @@ private:
 	GLuint vertexbuffer;
 	GLuint uvbuffer;
 	GLuint normalbuffer;
+	GLuint fragmentShader;
 
 	std::vector<glm::vec4> geometric_vertex;
 	std::vector<glm::vec3> texture_coords;
 	std::vector<glm::vec3> vertex_normals;
+	glm::vec3 m_color;
 
 	glm::mat4 ModelMatrix;
 
@@ -22,7 +24,7 @@ private:
 	const char* ObjPath;
 
 public:
-	PhysicalObject(const char* path, GLFWwindow* Objwindow);
+	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
 
 	int initialize();
 	int execute();

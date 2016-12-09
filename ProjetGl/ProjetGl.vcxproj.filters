@@ -16,6 +16,9 @@
     <Filter Include="Fichiers sources\common">
       <UniqueIdentifier>{834e8414-34c8-4dc3-a5ea-0e84e91a26c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\shader">
+      <UniqueIdentifier>{a9f56b48-0c06-4420-9100-324c4aedf2e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,5 +107,13 @@
     <ClInclude Include="PhysicalObject.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\TransformVertexShader.vertexshader">
+      <Filter>Fichiers sources\shader</Filter>
+    </None>
+    <None Include="shader\Color.fragmentshader">
+      <Filter>Fichiers sources\shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

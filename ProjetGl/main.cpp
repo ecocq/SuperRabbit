@@ -82,21 +82,26 @@ int main(void)
 	glBindVertexArray(VertexArrayID);
 
 	// Create and compile our GLSL program from the shaders
-	GLuint programID = LoadShaders("TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader");
+	GLuint programID = LoadShaders("shader/TransformVertexShader.vertexshader", "shader/Color.fragmentshader");
+	
 
-	// Get a handle for our "MVP" uniform
+	// Get a handle for our "MVP" and "View"  uniform
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+	GLuint ViewID = glGetUniformLocation(programID, "View_matrix");
 
 	// Load the texture
 	//---------------------------------------- TODO REMOVE ????
 	GLuint Texture = loadDDS("obj/wolf-obj.mtl");
 
 	// Get a handle for our "myTextureSampler" uniform
-	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
+	// GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
+
+	// Get a handle for our "fragmentColor" uniform
+	GLuint fragColor = glGetUniformLocation(programID, "m_fragColor");
 
 	//Init objects
-	PhysicalObject *obj_rabbit = new PhysicalObject("obj/Rabbit.obj", window);
-	PhysicalObject *obj_rabbit2 = new PhysicalObject("obj/Rabbit.obj", window);
+	PhysicalObject *obj_rabbit = new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
+	PhysicalObject *obj_rabbit2 = new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 0.0f), fragColor, window);
 
 	obj_rabbit->initialize();
 	obj_rabbit2->initialize();
@@ -127,12 +132,13 @@ int main(void)
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+		glUniformMatrix4fv(ViewID, 1, GL_FALSE, &ViewMatrix[0][0]);
 
 		// Bind our texture in Texture Unit 0
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, Texture);
 		// Set our "myTextureSampler" sampler to user Texture Unit 0
-		glUniform1i(TextureID, 0);
+		// glUniform1i(TextureID, 0);
 
 		obj_rabbit->execute();
 		obj_rabbit2->execute();
@@ -148,7 +154,7 @@ int main(void)
 	delete(obj_rabbit);
 	delete(obj_rabbit2);
 	glDeleteProgram(programID);
-	glDeleteTextures(1, &TextureID);
+	// glDeleteTextures(1, &TextureID);
 	glDeleteVertexArrays(1, &VertexArrayID);
 
 	// Close OpenGL window and terminate GLFW

@@ -12,9 +12,11 @@
 #include "PhysicalObject.h"
 #include "ObjParser.h"
 
-PhysicalObject::PhysicalObject(const char* path, GLFWwindow* Objwindow)
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow)
 {
 	ObjPath = path;
+	m_color = objcolor;
+	fragmentShader = fragShader;
 	window = Objwindow;
 }
 
@@ -52,7 +54,8 @@ int PhysicalObject::initialize() {
 }
 
 int PhysicalObject::execute() {
-	
+	glUniform3fv(fragmentShader, 1, &m_color[0]);
+
 	// Compute the model matrix from keyboard and mouse input
 	applyTransformsFromControls();
 
@@ -125,7 +128,7 @@ PhysicalObject::~PhysicalObject()
 	}
 }
 
-/* Init transforms - put null if not needed */
+/* Init transforms  */
 void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
 	if (rotate != glm::vec3(0, 0, 0)) {
 		applyRotation(ModelMatrix, rotate.x, rotate.y, rotate.z);

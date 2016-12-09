@@ -204,6 +204,10 @@
     <ClInclude Include="PhysicalObject.h" />
     <ClInclude Include="transformation_mat.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\Color.fragmentshader" />
+    <None Include="shader\TransformVertexShader.vertexshader" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
