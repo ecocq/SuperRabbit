@@ -20,6 +20,7 @@ using namespace glm;
 #include "Camera.h"
 #include "ObjParser.h"
 #include "PhysicalObject.h"
+#include "MovableObject.h"
 
 int main(void)
 {
@@ -100,12 +101,9 @@ int main(void)
 	GLuint fragColor = glGetUniformLocation(programID, "m_fragColor");
 
 	//Init objects
-	PhysicalObject *obj_rabbit = new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
-	PhysicalObject *obj_rabbit2 = new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 0.0f), fragColor, window);
+	PhysicalObject *obj_rabbit = new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
 
 	obj_rabbit->initialize();
-	obj_rabbit2->initialize();
-	obj_rabbit2->initTransforms(glm::vec3(1.5, 0, 0), glm::vec3(0, 90, 0));
 
 	//Init camera
 	Camera* cam = new Camera();
@@ -141,7 +139,6 @@ int main(void)
 		// glUniform1i(TextureID, 0);
 
 		obj_rabbit->execute();
-		obj_rabbit2->execute();
 
 		// Swap buffers
 		glfwSwapBuffers(window);
@@ -152,7 +149,6 @@ int main(void)
 		glfwWindowShouldClose(window) == 0);
 	
 	delete(obj_rabbit);
-	delete(obj_rabbit2);
 	glDeleteProgram(programID);
 	// glDeleteTextures(1, &TextureID);
 	glDeleteVertexArrays(1, &VertexArrayID);
