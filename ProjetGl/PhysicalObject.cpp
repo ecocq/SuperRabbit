@@ -132,6 +132,7 @@ PhysicalObject::~PhysicalObject()
 /* Init transforms - put null if not needed */
 void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
 	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
 
 	if (rotate != glm::vec3(0, 0, 0)) {
@@ -150,7 +151,7 @@ void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
 	}
 	//Apply transformations on all points
 	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
 	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
 
@@ -171,13 +172,13 @@ void PhysicalObject::applyTransformsFromControls() {
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(-0.2,0,0));
+		applyTranslation(glm::vec3(0,0,0.2));
 	}
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, -0.2, 0));
 	}
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0.2, 0, 0));
+		applyTranslation(glm::vec3(0, 0, -0.2));
 	}
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, 0.2, 0));
