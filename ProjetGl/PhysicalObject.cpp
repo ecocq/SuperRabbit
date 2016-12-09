@@ -103,7 +103,7 @@ int PhysicalObject::execute() {
 	//Apply transformations on all points
 	if (ModelMatrix != glm::mat4(1.0)) {
 		for (int i = 0; i < geometric_vertex.size(); i++) {
-			geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
+			geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 		}
 	}
 	
