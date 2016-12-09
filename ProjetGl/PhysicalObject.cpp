@@ -226,13 +226,14 @@ void PhysicalObject::applyTranslation(glm::vec3 trans) {
 }
 
 void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) {
-	/*
-	std::cout << "Avant trans : " << geometric_vertex[2][2] << std::endl;
+	
+	/*std::cout << "Avant trans : " << geometric_vertex[2][2] << std::endl;
 	ModelMatrix = translation(-translated);
 	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = translation(-translated) * geometric_vertex[i];
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
-	std::cout << "Apres trans " << geometric_vertex[2][2] << std::endl;*/
+	std::cout << "Apres trans " << geometric_vertex[2][2] << std::endl;
+	*/
 	if (angle_x != 0) {
 		ModelMatrix = ModelMatrix * rotation_x(angle_x);
 	}
@@ -241,15 +242,15 @@ void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) 
 	}
 	if (angle_z != 0) {
 		ModelMatrix = ModelMatrix * rotation_z(angle_z);
-	}/*
+	}
+	/*
 	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = geometric_vertex[i] * ModelMatrix;
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
 	std::cout << "Apres Modele" << geometric_vertex[2][2] << std::endl;
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = translation(-translated) * geometric_vertex[i];
-	}
-	std::cout << "Après trans" << geometric_vertex[2][2] << std::endl;*/
+	ModelMatrix = translation(-translated) * ModelMatrix;
+	std::cout << "Après trans" << geometric_vertex[2][2] << std::endl;
+	*/
 }
 
 void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
