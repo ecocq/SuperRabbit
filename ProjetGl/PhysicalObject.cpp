@@ -167,7 +167,7 @@ void PhysicalObject::applyTransformsFromControls() {
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-			applyRotation(0, 2, 0);
+		applyRotation(0, 2, 0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
