@@ -101,9 +101,16 @@ int main(void)
 	GLuint fragColor = glGetUniformLocation(programID, "m_fragColor");
 
 	//Init objects
+	std::vector<PhysicalObject*> objects;
 	PhysicalObject *obj_rabbit = new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
+	PhysicalObject *wall = new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
+	objects.push_back(obj_rabbit);
+	objects.push_back(wall);
 
-	obj_rabbit->initialize();
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->initialize();
+	}
 
 	//Init camera
 	Camera* cam = new Camera();
@@ -138,7 +145,10 @@ int main(void)
 		// Set our "myTextureSampler" sampler to user Texture Unit 0
 		// glUniform1i(TextureID, 0);
 
-		obj_rabbit->execute();
+		for (int i = 0; i < objects.size(); i++)
+		{
+			objects[i]->execute();
+		}
 
 		// Swap buffers
 		glfwSwapBuffers(window);
@@ -148,7 +158,12 @@ int main(void)
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
 	
-	delete(obj_rabbit);
+	for (int i = 0; i < objects.size(); i++)
+	{
+		delete(objects[i]);
+	}
+	objects.clear();
+
 	glDeleteProgram(programID);
 	// glDeleteTextures(1, &TextureID);
 	glDeleteVertexArrays(1, &VertexArrayID);

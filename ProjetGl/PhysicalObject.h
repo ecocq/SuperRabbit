@@ -16,6 +16,8 @@ protected:
 	std::vector<glm::vec3> vertex_normals;
 	glm::vec3 m_color;
 
+	glm::vec3 position;
+
 	glm::mat4 ModelMatrix;
 	glm::vec3 translated;
 
