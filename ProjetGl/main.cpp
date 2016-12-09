@@ -21,6 +21,7 @@ using namespace glm;
 #include "ObjParser.h"
 #include "PhysicalObject.h"
 #include "MovableObject.h"
+#include "transformation_mat.h"
 
 int main(void)
 {
@@ -103,8 +104,9 @@ int main(void)
 	//Init objects
 	std::vector<PhysicalObject*> objects;
 	objects.push_back(new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window));
-	objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window, glm::vec3(0, 0, -10)));
-	
+	objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(0.0f, 0.0f, 1.0f), fragColor, window, glm::vec3(0, 0, -10)));
+	objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(0.0f, 0.0f, 1.0f), fragColor, window, glm::vec3(0, 0, 10)));
+	objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(0.0f, 0.0f, 1.0f), fragColor, window, rotation_x(90) * translation(glm::vec3(0,-10,-1))));
 
 	for (int i = 0; i < objects.size(); i++)
 	{
