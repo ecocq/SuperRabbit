@@ -34,25 +34,26 @@ void MovableObject::setObjects(std::vector<PhysicalObject*> _objects) {
 
 
 void MovableObject::applyTransformsFromControls() {
-	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-		applyRotation(5, 0, 0);
-	}
-
-	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-		applyRotation(0, 2, 0);
-	}
-
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, 0, 0.2));
-	}
-	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0, -0.2, 0));
-	}
-	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+	}else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, 0, -0.2));
-	}
-	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0, 0.2, 0));
+	}else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
+		applyTranslation(glm::vec3(-0.2, 0, 0));
+	}else if(glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
+		applyTranslation(glm::vec3(0.2 ,0, 0));
+	}else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+		applyRotation(-2, 0, 0);
+	}else if (glfwGetKey(window, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
+		applyRotation(2, 0, 0);
+	}else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+		applyRotation(0, 2, 0);
+	}else if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
+		applyRotation(0, -2, 0);
+	}else if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
+		applyRotation(0, 0, -2);
+	}else if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+		applyRotation(0, 0, 2);
 	}
 
 	//Apply when click and move mouse?

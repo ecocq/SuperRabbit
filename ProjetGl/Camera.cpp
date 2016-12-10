@@ -20,19 +20,19 @@ void Camera::execute(GLFWwindow *window)
 	glm::vec3 cartesian_dir =  rotation_y(angle) * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::vec3 cartesian_dir_right =  rotation_y(angle) * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		position = translation(cartesian_dir * speed) * position;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 		position = translation(-cartesian_dir * speed) * position;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 		position = translation(cartesian_dir_right * speed) * position;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 		position = translation(-cartesian_dir_right * speed) * position;
 	}
 
@@ -40,7 +40,7 @@ void Camera::execute(GLFWwindow *window)
 		angle += 1.0f;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
 		angle -= 1.0f;
 	}
 
