@@ -43,9 +43,9 @@ void MovableObject::applyTransformsFromControls() {
 	}else if(glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0.2 ,0, 0));
 	}else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-		applyRotation(-2, 0, 0);
+		applyTranslation(glm::vec3(0, 0.2, 0));
 	}else if (glfwGetKey(window, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
-		applyRotation(2, 0, 0);
+		applyTranslation(glm::vec3(0, -0.2, 0));
 	}else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
 		applyRotation(0, 2, 0);
 	}else if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
@@ -54,6 +54,11 @@ void MovableObject::applyTransformsFromControls() {
 		applyRotation(0, 0, -2);
 	}else if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
 		applyRotation(0, 0, 2);
+	}else if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
+		applyRotation(2, 0, 0);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
+		applyRotation(-2, 0, 0);
 	}
 
 	//Apply when click and move mouse?
