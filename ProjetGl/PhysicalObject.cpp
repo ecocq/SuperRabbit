@@ -33,11 +33,13 @@ PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::ve
 }
 
 void PhysicalObject::fix_vertex() {
+
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
 	// TODO transform normals obj ....
 	m_OBB.transform(ModelMatrix);
+
 }
 
 int PhysicalObject::initialize() {
@@ -205,7 +207,9 @@ void PhysicalObject::applyTransformsFromControls() {
 /* --- Apply Transformations --- */
 
 void PhysicalObject::applyTranslation(glm::vec3 trans) {
+	translated_old = translated;
 	translated = translated + trans;
+
 	std::cout << translated.x << "," << translated.y << "," << translated.z << std::endl;
 	ModelMatrix = ModelMatrix * translation(trans);
 }

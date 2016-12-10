@@ -27,6 +27,7 @@ public:
 	bool collides(const OBB &other);
 
 	void execute();
+	void restore();
 
 
 private:
@@ -39,4 +40,6 @@ private:
 
 	std::vector<glm::vec4> geometric_vertex;
 	std::vector<glm::vec4> vertex_normals;
+	std::vector<glm::vec4> geometric_vertex_old;
+	std::vector<glm::vec4> vertex_normals_old;
 };

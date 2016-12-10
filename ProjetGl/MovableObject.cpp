@@ -3,11 +3,35 @@
 
 // Include GLM
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include "PhysicalObject.h"
 
 #include "MovableObject.h"
 
 MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject(path, objcolor, fragShader, Objwindow) { }
+
+void MovableObject::fix_vertex() {
+	// TODO transform normals obj ....
+	m_OBB.transform(ModelMatrix);
+
+	// Ignore first object
+	for (int i = 1; i < m_objects.size(); i++) {
+		if (m_OBB.collides(m_objects[i]->m_OBB)) {
+			m_OBB.restore();
+			translated = translated_old;
+			return;
+		}
+	}
+
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+	}
+}
+
+void MovableObject::setObjects(std::vector<PhysicalObject*> _objects) {
+	m_objects = _objects;
+}
+
 
 void MovableObject::applyTransformsFromControls() {
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {

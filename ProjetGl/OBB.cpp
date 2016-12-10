@@ -29,8 +29,6 @@ void OBB::initializePosition() {
 	geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymin, m_extremum.zmax, 1));
 	geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymin, m_extremum.zmin, 1));
 
-	
-
 	/* Set bounding box normals */
 	vertex_normals.push_back(glm::vec4(0, 0, 1, 1));
 	vertex_normals.push_back(glm::vec4(0, 0, -1, 1));
@@ -40,29 +38,30 @@ void OBB::initializePosition() {
 	vertex_normals.push_back(glm::vec4(-1, 0, 0, 1));
 }
 
+void OBB::restore() {
+	geometric_vertex = geometric_vertex_old;
+	vertex_normals = vertex_normals_old;
+}
 
 void OBB::transform(glm::mat4 _matrix) {
-	/* std::cout << "----BEFORE----" << std::endl;
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		std::cout << glm::to_string(geometric_vertex[i]) << std::endl;
-	}*/
+	geometric_vertex_old = geometric_vertex;
+	vertex_normals_old = vertex_normals;
+
+	/* Transform box coordinates */
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = _matrix * geometric_vertex[i];
 	}
+	/* Avoid translating normals */
 	_matrix[3][0] = _matrix[3][1] = _matrix[3][2] = 0;
+
+	/* Transform box normals*/
 	for (int i = 0; i < vertex_normals.size(); i++) {
 		vertex_normals[i] = _matrix * vertex_normals[i];
 	}
-	/* std::cout << "----AFTER----" << std::endl;
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		std::cout << glm::to_string(geometric_vertex[i]) << std::endl;
-	}*/
-
 }
 
-
+/* Draw bounding box */
 void OBB::execute() {
-	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
@@ -76,20 +75,20 @@ void OBB::execute() {
 		(void*)0            // array buffer offset
 	);
 
-	// Draw the triangle !
+
 	glDrawArrays(GL_LINES, 0, geometric_vertex.size());
 
 	glDisableVertexAttribArray(0);
 }
 
-void SATtest(const glm::vec4 axis, const std::vector<glm::vec4> ptSet, float& minAlong, float& maxAlong)
+void SATtest(const glm::vec4 axis, const std::vector<glm::vec4> vertex, float& min, float& max)
 {
-	minAlong = HUGE, maxAlong = -HUGE;
-	for (int i = 0; i < ptSet.size(); i++)
+	min = HUGE, max = -HUGE;
+	for (int i = 0; i < vertex.size(); i++)
 	{
-		float dotVal = glm::dot(glm::vec3(ptSet[i]), glm::vec3(axis));
-		if (dotVal < minAlong)  minAlong = dotVal;
-		if (dotVal > maxAlong)  maxAlong = dotVal;
+		float dot = glm::dot(glm::vec3(vertex[i]), glm::vec3(axis));
+		if (dot < min)  min = dot;
+		if (dot > max)  max = dot;
 	}
 }
 
@@ -102,7 +101,7 @@ bool overlaps(float min1, float max1, float min2, float max2)
 	return isBetweenOrdered(min2, min1, max1) || isBetweenOrdered(min1, min2, max2);
 }
 
-
+/* Is bounding box colliding with another */
 bool OBB::collides(const OBB &other) {
 	for (int i = 0; i < vertex_normals.size(); i++) {
 		float shape1Min, shape1Max, shape2Min, shape2Max;

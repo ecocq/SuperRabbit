@@ -21,9 +21,7 @@ protected:
 
 	glm::mat4 ModelMatrix;
 	glm::vec3 translated;
-
-	
-
+	glm::vec3 translated_old;
 
 	bool textures_coords_valid;
 	bool normals_valid;
@@ -37,7 +35,7 @@ public:
 
 	int initialize();
 	int execute();
-	void fix_vertex();
+	virtual void fix_vertex();
 	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
 	virtual void applyTransformsFromControls();
 	void applyTranslation(glm::vec3 trans);
