@@ -29,6 +29,8 @@ void OBB::initializePosition() {
 	geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymin, m_extremum.zmax, 1));
 	geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymin, m_extremum.zmin, 1));
 
+	
+
 	/* Set bounding box normals */
 	vertex_normals.push_back(glm::vec4(0, 0, 1, 1));
 	vertex_normals.push_back(glm::vec4(0, 0, -1, 1));
@@ -40,12 +42,22 @@ void OBB::initializePosition() {
 
 
 void OBB::transform(glm::mat4 _matrix) {
+	/* std::cout << "----BEFORE----" << std::endl;
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		std::cout << glm::to_string(geometric_vertex[i]) << std::endl;
+	}*/
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = _matrix * geometric_vertex[i];
 	}
+	_matrix[3][0] = _matrix[3][1] = _matrix[3][2] = 0;
 	for (int i = 0; i < vertex_normals.size(); i++) {
 		vertex_normals[i] = _matrix * vertex_normals[i];
 	}
+	/* std::cout << "----AFTER----" << std::endl;
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		std::cout << glm::to_string(geometric_vertex[i]) << std::endl;
+	}*/
+
 }
 
 

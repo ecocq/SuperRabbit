@@ -18,8 +18,7 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	fragmentShader = fragShader;
 	window = Objwindow;
 	position = glm::vec3(0, 0, 0);
-	ModelMatrix = initialTrans;
-	
+	ModelMatrix = initialTrans;	
 }
 
 PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, translation(initialPos))
@@ -52,6 +51,9 @@ int PhysicalObject::initialize() {
 	else if (ObjPath == "NONE") {
 
 	}
+
+	m_OBB = OBB(glm::vec3(0, 0, 0), _extremum);
+
 	if (ModelMatrix != glm::mat4(1.0)) {
 		fix_vertex();
 	}
@@ -78,7 +80,7 @@ int PhysicalObject::initialize() {
 	ModelMatrix = glm::mat4(1.0);
 	translated = glm::vec3(0);
 
-	m_OBB = OBB(glm::vec3(0, 0, 0), _extremum);
+	
 
 	return 0;
 }
