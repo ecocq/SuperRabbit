@@ -23,9 +23,12 @@ void Camera::execute(GLFWwindow *window)
 	glfwSetCursorPos(window, 1024 / 2, 768 / 2);
 	horizontalAngle -= mouseSpeed * float(1024 / 2 - xpos);
 	verticalAngle += mouseSpeed * float(768 / 2 - ypos);
+	verticalAngle = (verticalAngle >= 89 || verticalAngle <= -89) ? copysign(1, verticalAngle) * 89 : verticalAngle ;
 
-	glm::vec3 cartesian_dir = rotation_z(verticalAngle) * rotation_y(horizontalAngle) * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-	glm::vec3 cartesian_dir_right = rotation_z(verticalAngle) * rotation_y(horizontalAngle) * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	glm::vec3 right = rotation_y(horizontalAngle) * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+	glm::vec3 cartesian_dir = rotation_around_axis(verticalAngle, right) * rotation_y(horizontalAngle) * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	glm::vec3 cartesian_dir_right = rotation_around_axis(verticalAngle, right) * rotation_y(horizontalAngle) * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
 	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		position = orthographic_projection(glm::vec3(0,1, 0)) * translation(cartesian_dir * speed) * position;
