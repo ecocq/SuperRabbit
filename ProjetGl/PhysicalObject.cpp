@@ -19,11 +19,13 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	window = Objwindow;
 	position = glm::vec3(0, 0, 0);
 	ModelMatrix = initialTrans;
+	m_OBB = OBB(ModelMatrix, glm::vec3(1.0f));
 }
 
 PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, translation(initialPos))
 {
 	position = initialPos;
+	
 }
 
 
@@ -36,7 +38,7 @@ void PhysicalObject::fix_vertex() {
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
-
+	m_OBB.setMatrix(ModelMatrix);
 }
 
 int PhysicalObject::initialize() {
@@ -89,6 +91,7 @@ int PhysicalObject::execute() {
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	if (ModelMatrix != glm::mat4(1.0)) {
 		glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
+		
 	}
 	glVertexAttribPointer(
 		0,                  // attribute
@@ -139,6 +142,8 @@ int PhysicalObject::execute() {
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+
+	m_OBB.execute();
 
 	ModelMatrix = glm::mat4(1.0);
 
