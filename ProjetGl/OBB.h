@@ -14,27 +14,29 @@
 #include <vector>
 #include <iostream>
 #include "glm/ext.hpp"
+#include "ObjParser.h"
 
 class OBB
 {
 public:
 	OBB() {};
-	OBB(glm::mat4 matrix, glm::vec3 extends);
+	OBB(glm::vec3 center, extremum _extremum);
 	~OBB();
 
-	bool collides(OBB &other);
+	void transform(glm::mat4 _matrix);
+	bool collides(const OBB &other);
+
 	void execute();
-	void setMatrix(glm::mat4 _matrix);
+
 
 private:
-	void GetInvRot(glm::vec3 *pvRot);
-	glm::vec3 GetCenterPoint();
 	void initializePosition();
 
-	glm::vec3 m_extent;
-	glm::mat4 m_matrix;
+	extremum m_extremum;
+	glm::vec3 m_center;
 
 	GLuint vertexbuffer;
 
 	std::vector<glm::vec4> geometric_vertex;
+	std::vector<glm::vec4> vertex_normals;
 };

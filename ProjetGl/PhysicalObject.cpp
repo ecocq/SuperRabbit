@@ -19,13 +19,12 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	window = Objwindow;
 	position = glm::vec3(0, 0, 0);
 	ModelMatrix = initialTrans;
-	m_OBB = OBB(ModelMatrix, glm::vec3(1.0f));
+	
 }
 
 PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, translation(initialPos))
 {
 	position = initialPos;
-	
 }
 
 
@@ -38,12 +37,14 @@ void PhysicalObject::fix_vertex() {
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
-	m_OBB.setMatrix(ModelMatrix);
+	// TODO transform normals obj ....
+	m_OBB.transform(ModelMatrix);
 }
 
 int PhysicalObject::initialize() {
+	extremum _extremum;
 
-	if (ObjPath != "NONE" && !loadObjFile(ObjPath, geometric_vertex, texture_coords, vertex_normals)) {
+	if (ObjPath != "NONE" && !loadObjFile(ObjPath, geometric_vertex, texture_coords, vertex_normals, _extremum)) {
 		fprintf(stderr, "Failed to load obj\n");
 		getchar();
 		return -1;
@@ -76,6 +77,8 @@ int PhysicalObject::initialize() {
 
 	ModelMatrix = glm::mat4(1.0);
 	translated = glm::vec3(0);
+
+	m_OBB = OBB(glm::vec3(0, 0, 0), _extremum);
 
 	return 0;
 }
