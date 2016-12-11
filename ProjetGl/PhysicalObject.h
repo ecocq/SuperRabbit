@@ -35,6 +35,7 @@ public:
 
 	int initialize();
 	int execute();
+	void animateTrans(glm::vec3 direction);
 	virtual void fix_vertex();
 	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
 	virtual void applyTransformsFromControls();
