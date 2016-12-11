@@ -7,8 +7,16 @@
 #include "PhysicalObject.h"
 
 #include "MovableObject.h"
+static int wheel;
 
-MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject(path, objcolor, fragShader, Objwindow) { }
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	wheel = yoffset;
+}
+
+MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject(path, objcolor, fragShader, Objwindow) { 	
+	glfwSetScrollCallback(window, scroll_callback);
+}
 
 void MovableObject::fix_vertex() {
 	// TODO transform normals obj ....
@@ -56,9 +64,18 @@ void MovableObject::applyTransformsFromControls() {
 		applyRotation(0, 0, 2);
 	}else if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
 		applyRotation(2, 0, 0);
-	}
-	else if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
+	}else if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
 		applyRotation(-2, 0, 0);
+	}
+
+	if (wheel != 0) {
+		if (wheel > 0) {
+			applyScale(glm::vec3(1.2, 1.2, 1.2));
+		}
+		else if (wheel < 0) {
+			this->applyScale(glm::vec3(0.8, 0.8, 0.8));
+		}
+		wheel = 0;
 	}
 
 	//Apply when click and move mouse?
