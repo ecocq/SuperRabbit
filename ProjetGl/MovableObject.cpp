@@ -19,7 +19,6 @@ MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragSh
 }
 
 void MovableObject::fix_vertex() {
-	// TODO transform normals obj ....
 	m_OBB.transform(ModelMatrix);
 
 	// Ignore first object
@@ -33,6 +32,15 @@ void MovableObject::fix_vertex() {
 
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+	}
+
+	glm::mat4 ModelWithoutTrans = ModelMatrix;
+	/* Avoid translating normals */
+	ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
+
+	for (int i = 0; i < vertex_normals.size(); i++) {
+		glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
+		vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
 	}
 }
 

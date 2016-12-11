@@ -83,8 +83,6 @@ int PhysicalObject::initialize() {
 	ModelMatrix = glm::mat4(1.0);
 	translated = glm::vec3(0);
 
-	
-
 	return 0;
 }
 
@@ -127,6 +125,9 @@ int PhysicalObject::execute() {
 	if (normals_valid) {
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		if (ModelMatrix != glm::mat4(1.0)) {
+			glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
+		}
 		glVertexAttribPointer(
 			2,                                // attribute
 			3,                                // size
