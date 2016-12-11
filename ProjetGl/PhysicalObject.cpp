@@ -211,8 +211,13 @@ void PhysicalObject::applyTranslation(glm::vec3 trans) {
 	translated_old = translated;
 	translated = translated + trans;
 
-	std::cout << translated.x << "," << translated.y << "," << translated.z << std::endl;
 	ModelMatrix = ModelMatrix * translation(trans);
+}
+
+void PhysicalObject::animateTrans(glm::vec3 direction) {
+	if(translated.x < direction.x) {
+		applyTranslation((direction - position) * 0.01);
+	}
 }
 
 void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) {
