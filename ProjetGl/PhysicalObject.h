@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "OBB.h"
 
 class PhysicalObject
 {
@@ -20,6 +21,7 @@ protected:
 
 	glm::mat4 ModelMatrix;
 	glm::vec3 translated;
+	glm::vec3 translated_old;
 
 	bool textures_coords_valid;
 	bool normals_valid;
@@ -33,7 +35,8 @@ public:
 
 	int initialize();
 	int execute();
-	void fix_vertex();
+	void animateTrans(glm::vec3 direction);
+	virtual void fix_vertex();
 	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
 	virtual void applyTransformsFromControls();
 	void applyTranslation(glm::vec3 trans);
@@ -47,6 +50,8 @@ public:
 	void applyShearingXY(float s, float t);
 	void applyShearingXZ(float s, float t);
 	void applyShearingYZ(float s, float t);
+
+	OBB m_OBB;
 
 	~PhysicalObject();
 };

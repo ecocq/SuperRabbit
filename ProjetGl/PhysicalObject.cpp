@@ -12,13 +12,14 @@
 #include "transformation_mat.h"
 
 
-PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::mat4 initialTrans){
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::mat4 initialTrans)
+{
 	ObjPath = path;
 	m_color = objcolor;
 	fragmentShader = fragShader;
 	window = Objwindow;
 	position = glm::vec3(0, 0, 0);
-	ModelMatrix = initialTrans;
+	ModelMatrix = initialTrans;	
 }
 
 PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, translation(initialPos))
@@ -33,15 +34,19 @@ PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::ve
 }
 
 void PhysicalObject::fix_vertex() {
+
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
+	// TODO transform normals obj ....
+	m_OBB.transform(ModelMatrix);
 
 }
 
 int PhysicalObject::initialize() {
+	extremum _extremum;
 
-	if (ObjPath != "NONE" && !loadObjFile(ObjPath, geometric_vertex, texture_coords, vertex_normals)) {
+	if (ObjPath != "NONE" && !loadObjFile(ObjPath, geometric_vertex, texture_coords, vertex_normals, _extremum)) {
 		fprintf(stderr, "Failed to load obj\n");
 		getchar();
 		return -1;
@@ -49,6 +54,9 @@ int PhysicalObject::initialize() {
 	else if (ObjPath == "NONE") {
 
 	}
+
+	m_OBB = OBB(glm::vec3(0, 0, 0), _extremum);
+
 	if (ModelMatrix != glm::mat4(1.0)) {
 		fix_vertex();
 	}
@@ -89,6 +97,7 @@ int PhysicalObject::execute() {
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	if (ModelMatrix != glm::mat4(1.0)) {
 		glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
+		
 	}
 	glVertexAttribPointer(
 		0,                  // attribute
@@ -116,6 +125,9 @@ int PhysicalObject::execute() {
 	if (normals_valid) {
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		if (ModelMatrix != glm::mat4(1.0)) {
+			glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
+		}
 		glVertexAttribPointer(
 			2,                                // attribute
 			3,                                // size
@@ -139,6 +151,8 @@ int PhysicalObject::execute() {
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(2);
+
+	m_OBB.execute();
 
 	ModelMatrix = glm::mat4(1.0);
 
@@ -195,9 +209,16 @@ void PhysicalObject::applyTransformsFromControls() {
 /* --- Apply Transformations --- */
 
 void PhysicalObject::applyTranslation(glm::vec3 trans) {
+	translated_old = translated;
 	translated = translated + trans;
-	std::cout << translated.x << "," << translated.y << "," << translated.z << std::endl;
+
 	ModelMatrix = ModelMatrix * translation(trans);
+}
+
+void PhysicalObject::animateTrans(glm::vec3 direction) {
+	if(translated.x < direction.x) {
+		applyTranslation((direction - position) * 0.01);
+	}
 }
 
 void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) {

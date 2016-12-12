@@ -3,32 +3,87 @@
 
 // Include GLM
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_inverse.hpp>
 #include "PhysicalObject.h"
 
 #include "MovableObject.h"
+static int wheel;
 
-MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject(path, objcolor, fragShader, Objwindow) { }
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	wheel = yoffset;
+}
+
+MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject(path, objcolor, fragShader, Objwindow) { 	
+	glfwSetScrollCallback(window, scroll_callback);
+}
+
+void MovableObject::fix_vertex() {
+	m_OBB.transform(ModelMatrix);
+
+	// Ignore first object
+	for (int i = 1; i < m_objects.size(); i++) {
+		if (m_OBB.collides(m_objects[i]->m_OBB)) {
+			m_OBB.restore();
+			translated = translated_old;
+			return;
+		}
+	}
+
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+	}
+
+	glm::mat4 ModelWithoutTrans = ModelMatrix;
+	/* Avoid translating normals */
+	ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
+
+	for (int i = 0; i < vertex_normals.size(); i++) {
+		glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
+		vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
+	}
+}
+
+void MovableObject::setObjects(std::vector<PhysicalObject*> _objects) {
+	m_objects = _objects;
+}
+
 
 void MovableObject::applyTransformsFromControls() {
-	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-		applyRotation(5, 0, 0);
-	}
-
-	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-		applyRotation(0, 2, 0);
-	}
-
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, 0, 0.2));
-	}
-	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0, -0.2, 0));
-	}
-	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+	}else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, 0, -0.2));
-	}
-	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
+	}else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
+		applyTranslation(glm::vec3(-0.2, 0, 0));
+	}else if(glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
+		applyTranslation(glm::vec3(0.2 ,0, 0));
+	}else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, 0.2, 0));
+	}else if (glfwGetKey(window, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
+		applyTranslation(glm::vec3(0, -0.2, 0));
+	}else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+		applyRotation(0, 2, 0);
+	}else if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
+		applyRotation(0, -2, 0);
+	}else if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
+		applyRotation(0, 0, -2);
+	}else if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+		applyRotation(0, 0, 2);
+	}else if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
+		applyRotation(2, 0, 0);
+	}else if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
+		applyRotation(-2, 0, 0);
+	}
+
+	if (wheel != 0) {
+		if (wheel > 0) {
+			applyScale(glm::vec3(1.2, 1.2, 1.2));
+		}
+		else if (wheel < 0) {
+			this->applyScale(glm::vec3(0.8, 0.8, 0.8));
+		}
+		wheel = 0;
 	}
 
 	//Apply when click and move mouse?

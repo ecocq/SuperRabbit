@@ -14,14 +14,41 @@ int count_substr(std::string s, std::string substr) {
 	return count;
 }
 
+void initExtremum(extremum &_extremum) {
+	_extremum.xmax = -HUGE;
+	_extremum.xmin = HUGE;
+	_extremum.ymax = -HUGE;
+	_extremum.ymin = HUGE;
+	_extremum.zmax = -HUGE;
+	_extremum.zmin = HUGE;
+}
+
+void updateExtremum(extremum &_extremum, glm::vec4 vertex) {
+	if (vertex.x > _extremum.xmax)
+		_extremum.xmax = vertex.x;
+	if (vertex.x < _extremum.xmin)
+		_extremum.xmin = vertex.x;
+
+	if (vertex.y > _extremum.ymax)
+		_extremum.ymax = vertex.y;
+	if (vertex.y < _extremum.ymin)
+		_extremum.ymin = vertex.y;
+
+	if (vertex.z > _extremum.zmax)
+		_extremum.zmax = vertex.z;
+	if (vertex.z < _extremum.zmin)
+		_extremum.zmin = vertex.z;
+}
 
 bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex,
 	std::vector<glm::vec3> &texture_coords,
-	std::vector<glm::vec3> &vertex_normals) {
+	std::vector<glm::vec3> &vertex_normals, extremum &_extremum) {
 
 	geometric_vertex.clear();
 	texture_coords.clear();
 	vertex_normals.clear();
+
+	initExtremum(_extremum);
 
 	std::vector<glm::vec4> temp_vertex;
 	std::vector<glm::vec3> temp_texture_coords;
@@ -54,6 +81,7 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 			vertex.w = 1.0f; // Default value
 			int n = sscanf(line_char.c_str(), "%f %f %f %f\n", &vertex.x, &vertex.y, &vertex.z, &vertex.w);
 			temp_vertex.push_back(vertex);
+			updateExtremum(_extremum, vertex);
 		}
 		else if (type == "vt") {
 			glm::vec3 coord;
