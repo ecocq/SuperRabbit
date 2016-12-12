@@ -105,8 +105,11 @@ int main(void)
 	//Init objects
 	std::vector<PhysicalObject*> objects;
 	MovableObject* m_rabbit = new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
+	PhysicalObject* carrot = new PhysicalObject("obj/carrot.obj", glm::vec3(1.0f, 0.6f, 0.03f), fragColor, window, rotation_x(90) * translation(glm::vec3(2, 0, 0)));
 	objects.push_back(m_rabbit);
+	objects.push_back(carrot);
 	objects.push_back(new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 0.0f), fragColor, window, glm::vec3(0, 0, 4)));
+
 	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, -10)));
 	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, 10)));
 	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, rotation_x(90) * translation(glm::vec3(0,-10,-1))));
@@ -150,6 +153,8 @@ int main(void)
 		ProjectionMatrix = cam->getProjection();
 		ViewMatrix = cam->getCamView();
 		MVP = ProjectionMatrix * ViewMatrix * glm::mat4(1.0);
+
+		carrot->animateTrans(glm::vec3(20.0f, 0.0f, 0.0f));
 
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform

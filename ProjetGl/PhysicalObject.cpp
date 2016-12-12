@@ -83,8 +83,6 @@ int PhysicalObject::initialize() {
 	ModelMatrix = glm::mat4(1.0);
 	translated = glm::vec3(0);
 
-	
-
 	return 0;
 }
 
@@ -127,6 +125,9 @@ int PhysicalObject::execute() {
 	if (normals_valid) {
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+		if (ModelMatrix != glm::mat4(1.0)) {
+			glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
+		}
 		glVertexAttribPointer(
 			2,                                // attribute
 			3,                                // size
@@ -211,8 +212,13 @@ void PhysicalObject::applyTranslation(glm::vec3 trans) {
 	translated_old = translated;
 	translated = translated + trans;
 
-	std::cout << translated.x << "," << translated.y << "," << translated.z << std::endl;
 	ModelMatrix = ModelMatrix * translation(trans);
+}
+
+void PhysicalObject::animateTrans(glm::vec3 direction) {
+	if(translated.x < direction.x) {
+		applyTranslation((direction - position) * 0.01);
+	}
 }
 
 void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) {
