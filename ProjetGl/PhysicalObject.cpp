@@ -33,13 +33,20 @@ PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::ve
 	geometric_vertex = _geometric_vertex;
 }
 
+void PhysicalObject::colliderTrans() {
+
+}
+
 void PhysicalObject::fix_vertex() {
+
+	m_OBB.transform(ModelMatrix);
+
+	colliderTrans();
 
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
 	// TODO transform normals obj ....
-	m_OBB.transform(ModelMatrix);
 
 	glm::mat4 ModelWithoutTrans = ModelMatrix;
 	/* Avoid translating normals */
