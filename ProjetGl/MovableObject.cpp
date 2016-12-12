@@ -77,10 +77,12 @@ void MovableObject::applyTransformsFromControls() {
 	}
 
 	if (wheel != 0) {
-		if (wheel > 0) {
+		if (wheel > 0 && scale > -20) {
+			scale--;
 			applyScale(glm::vec3(1.2, 1.2, 1.2));
 		}
-		else if (wheel < 0) {
+		else if (wheel < 0 && scale < 20) {
+			scale++;
 			this->applyScale(glm::vec3(0.8, 0.8, 0.8));
 		}
 		wheel = 0;
