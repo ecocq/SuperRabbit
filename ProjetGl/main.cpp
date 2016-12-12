@@ -22,6 +22,7 @@ using namespace glm;
 #include "PhysicalObject.h"
 #include "MovableObject.h"
 #include "transformation_mat.h"
+#include "Wall.h"
 
 int main(void)
 {
@@ -106,9 +107,22 @@ int main(void)
 	MovableObject* m_rabbit = new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 0.0f, 0.0f), fragColor, window);
 	objects.push_back(m_rabbit);
 	objects.push_back(new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 0.0f), fragColor, window, glm::vec3(0, 0, 4)));
-	objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, -10)));
-	objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, 10)));
-	objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, rotation_x(90) * translation(glm::vec3(0,-10,-1))));
+	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, -10)));
+	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, 10)));
+	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, rotation_x(90) * translation(glm::vec3(0,-10,-1))));
+	// Walls and obstacles
+	glm::vec3 wallColor(0.5f, 0.5f, 0.5f);
+	objects.push_back(new Wall(glm::vec2(10, 5), glm::vec3(0, -3, -1), glm::vec3(0, 0, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(10, 5), glm::vec3(0, -3, -1), glm::vec3(-90, 0, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(10, 5), glm::vec3(0, -3, 4), glm::vec3(0, 0, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(10, 5), glm::vec3(0, 2, -1), glm::vec3(-90, 0, 0), wallColor, fragColor, window));
+
+	// Obstacle 1
+	objects.push_back(new Wall(glm::vec2(2, 5), glm::vec3(5, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(2, 5), glm::vec3(5, -3, 2), glm::vec3(0, 90, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(1, 3), glm::vec3(5, -3, 1), glm::vec3(0, 90, 0), wallColor, fragColor, window));
+	
+	
 	m_rabbit->setObjects(objects);
 
 	for (int i = 0; i < objects.size(); i++)
