@@ -5,6 +5,7 @@ public:
 	MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
 
 	void applyTransformsFromControls();
+	void fix_vertex();
 	void colliderTrans();
 
 	void setObjects(std::vector<PhysicalObject*> _objects);

@@ -18,7 +18,8 @@ MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragSh
 	glfwSetScrollCallback(window, scroll_callback);
 }
 
-void MovableObject::colliderTrans() {
+void MovableObject::fix_vertex() {
+	m_OBB.transform(ModelMatrix);
 
 	// Ignore first object
 	for (int i = 1; i < m_objects.size(); i++) {
@@ -29,6 +30,18 @@ void MovableObject::colliderTrans() {
 		}
 	}
 
+	for (int i = 0; i < geometric_vertex.size(); i++) {
+		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
+	}
+
+	glm::mat4 ModelWithoutTrans = ModelMatrix;
+	/* Avoid translating normals */
+	ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
+
+	for (int i = 0; i < vertex_normals.size(); i++) {
+		glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
+		vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
+	}
 }
 
 void MovableObject::setObjects(std::vector<PhysicalObject*> _objects) {

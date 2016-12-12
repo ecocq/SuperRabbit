@@ -27,14 +27,13 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	position = initialPos;
 }
 
+void PhysicalObject::colliderTrans()
+{
+}
 
 PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject("NONE", objcolor, fragShader, Objwindow)
 {
 	geometric_vertex = _geometric_vertex;
-}
-
-void PhysicalObject::colliderTrans() {
-
 }
 
 void PhysicalObject::fix_vertex() {
