@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <thread>
 #include "OBB.h"
 
 class PhysicalObject
@@ -50,6 +51,10 @@ public:
 	void applyShearingXY(float s, float t);
 	void applyShearingXZ(float s, float t);
 	void applyShearingYZ(float s, float t);
+
+	bool ModelChanged() { return ModelMatrix != glm::mat4(1.0); };
+
+	std::thread member1Thread() { return std::thread([=] { fix_vertex(); }); };
 
 	OBB m_OBB;
 

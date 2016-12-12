@@ -34,13 +34,14 @@ PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::ve
 }
 
 void PhysicalObject::fix_vertex() {
-
+	if (ModelMatrix != glm::mat4(1.0)) {
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
 	// TODO transform normals obj ....
 	m_OBB.transform(ModelMatrix);
-
+	ModelMatrix = glm::mat4(1.0);
+	}
 }
 
 int PhysicalObject::initialize() {
@@ -140,9 +141,8 @@ int PhysicalObject::execute() {
 
 
 	//Apply transformations on all points
-	if (ModelMatrix != glm::mat4(1.0)) {
-		fix_vertex();
-	}
+	//fix_vertex();
+
 
 
 	// Draw the triangle !
@@ -154,7 +154,7 @@ int PhysicalObject::execute() {
 
 	m_OBB.execute();
 
-	ModelMatrix = glm::mat4(1.0);
+	
 
 	return 0;
 }

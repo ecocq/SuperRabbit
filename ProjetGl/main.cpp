@@ -15,6 +15,8 @@ GLFWwindow* window;
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
+#include <thread>
+
 #include <common/shader.hpp>
 #include <common/texture.hpp>
 #include "Camera.h"
@@ -156,6 +158,11 @@ int main(void)
 		for (int i = 0; i < objects.size(); i++)
 		{
 			objects[i]->execute();
+			if (objects[i]->ModelChanged()) {
+			std::thread* first = new std::thread(objects[i]->member1Thread());
+
+			first->detach();
+			}
 		}
 
 		// Swap buffers
