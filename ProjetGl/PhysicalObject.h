@@ -11,6 +11,7 @@ protected:
 	GLuint uvbuffer;
 	GLuint normalbuffer;
 	GLuint fragmentShader;
+	GLint programID;
 
 	std::vector<glm::vec4> geometric_vertex;
 	std::vector<glm::vec3> texture_coords;
@@ -20,6 +21,7 @@ protected:
 	glm::vec3 position;
 
 	glm::mat4 ModelMatrix;
+	glm::mat4 CompleteModelMatrix;
 	glm::vec3 translated;
 	glm::vec3 translated_old;
 
@@ -27,17 +29,17 @@ protected:
 	bool normals_valid;
 
 	const char* ObjPath;
+	float speed = 0.02f;
 
 public:
-	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::mat4 initialPos = glm::mat4(1.0));
-	PhysicalObject(std::vector<glm::vec4> geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
-	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos);
+	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::mat4 initialPos = glm::mat4(1.0));
+	PhysicalObject(std::vector<glm::vec4> geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID);
+	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::vec3 initialPos);
 
-	int initialize();
-	int execute();
+	int initialize(glm::mat4 MVP);
+	int execute(glm::mat4 MVP);
 	void animateTrans(glm::vec3 direction);
-	virtual void fix_vertex();
-	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
+	virtual void fix_vertex(glm::mat4 MVP);
 	virtual void applyTransformsFromControls();
 	void colliderTrans();
 	void applyTranslation(glm::vec3 trans);

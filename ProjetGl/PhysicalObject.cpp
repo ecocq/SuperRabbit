@@ -12,7 +12,7 @@
 #include "transformation_mat.h"
 
 
-PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::mat4 initialTrans)
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::mat4 initialTrans)
 {
 	ObjPath = path;
 	m_color = objcolor;
@@ -20,9 +20,11 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	window = Objwindow;
 	position = glm::vec3(0, 0, 0);
 	ModelMatrix = initialTrans;	
+	CompleteModelMatrix = glm::mat4(1.0);
+	this->programID = programID;
 }
 
-PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, translation(initialPos))
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, programID, translation(initialPos))
 {
 	position = initialPos;
 }
@@ -31,34 +33,24 @@ void PhysicalObject::colliderTrans()
 {
 }
 
-PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject("NONE", objcolor, fragShader, Objwindow)
+PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID) : PhysicalObject("NONE", objcolor, fragShader, Objwindow, programID)
 {
 	geometric_vertex = _geometric_vertex;
 }
 
-void PhysicalObject::fix_vertex() {
+void PhysicalObject::fix_vertex(glm::mat4 MVP) {
 
-	m_OBB.transform(ModelMatrix);
+	m_OBB.transform(CompleteModelMatrix);
 
 	colliderTrans();
 
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-	}
-	// TODO transform normals obj ....
-
-	glm::mat4 ModelWithoutTrans = ModelMatrix;
-	/* Avoid translating normals */
-	ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
-
-	for (int i = 0; i < vertex_normals.size(); i++) {
-		glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
-		vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
-	}
-
+	GLint MVPHandle = glGetUniformLocation(programID, "MVP");
+	CompleteModelMatrix = CompleteModelMatrix * ModelMatrix;
+	glm::mat4 MVPMatrix = MVP * CompleteModelMatrix;
+	glUniformMatrix4fv(MVPHandle, 1, GL_FALSE, &MVPMatrix[0][0]);
 }
 
-int PhysicalObject::initialize() {
+int PhysicalObject::initialize(glm::mat4 MVP) {
 	extremum _extremum;
 
 	if (ObjPath != "NONE" && !loadObjFile(ObjPath, geometric_vertex, texture_coords, vertex_normals, _extremum)) {
@@ -72,13 +64,11 @@ int PhysicalObject::initialize() {
 
 	m_OBB = OBB(glm::vec3(0, 0, 0), _extremum);
 
-	if (ModelMatrix != glm::mat4(1.0)) {
-		fix_vertex();
-	}
+	fix_vertex(MVP);
+
 
 	textures_coords_valid = (texture_coords.size() > 0 ? true : false);
-	normals_valid = (vertex_normals.size() > 0 ? true : false);
-
+	normals_valid = (vertex_normals.size() > 0 ? true : false);
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
@@ -90,6 +80,14 @@ int PhysicalObject::initialize() {
 	}
 
 	if (normals_valid) {
+
+		glm::mat4 ModelWithoutTrans = ModelMatrix;
+		/* Avoid translating normals */
+		ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
+		for (int i = 0; i < vertex_normals.size(); i++) {
+			glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
+			vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
+		}
 		glGenBuffers(1, &normalbuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
 		glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
@@ -101,7 +99,7 @@ int PhysicalObject::initialize() {
 	return 0;
 }
 
-int PhysicalObject::execute() {
+int PhysicalObject::execute(glm::mat4 MVP) {
 	glUniform3fv(fragmentShader, 1, &m_color[0]);
 
 	// Compute the model matrix from keyboard and mouse input
@@ -110,10 +108,6 @@ int PhysicalObject::execute() {
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	if (ModelMatrix != glm::mat4(1.0)) {
-		glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
-		
-	}
 	glVertexAttribPointer(
 		0,                  // attribute
 		4,                  // size
@@ -140,9 +134,6 @@ int PhysicalObject::execute() {
 	if (normals_valid) {
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		if (ModelMatrix != glm::mat4(1.0)) {
-			glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
-		}
 		glVertexAttribPointer(
 			2,                                // attribute
 			3,                                // size
@@ -155,9 +146,8 @@ int PhysicalObject::execute() {
 
 
 	//Apply transformations on all points
-	if (ModelMatrix != glm::mat4(1.0)) {
-		fix_vertex();
-	}
+
+	fix_vertex(MVP);
 
 
 	// Draw the triangle !
@@ -183,36 +173,6 @@ PhysicalObject::~PhysicalObject()
 	}
 }
 
-/* Init transforms  */
-void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
-
-	if (rotate != glm::vec3(0, 0, 0)) {
-		if (rotate.x != 0) {
-			ModelMatrix = ModelMatrix * rotation_x(rotate.x);
-		}
-		if (rotate.y != 0) {
-			ModelMatrix = ModelMatrix * rotation_y(rotate.y);
-		}
-		if (rotate.z != 0) {
-			ModelMatrix = ModelMatrix * rotation_z(rotate.z);
-		}
-	}
-	if (translate != glm::vec3(0, 0, 0)) {
-		applyTranslation(translate);
-	}
-	//Apply transformations on all points
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-	}
-	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
-
-	glDisableVertexAttribArray(0);
-
-	ModelMatrix = glm::mat4(1.0);
-}
 
 /* This function will be a default control transforms function
 We should use inheritance to redefine according to objects behaviors */
@@ -249,7 +209,7 @@ void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) 
 	}
 
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * rotationMatrix * translation(-pos);
+	ModelMatrix = ModelMatrix * rotationMatrix;
 }
 
 void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
@@ -259,7 +219,7 @@ void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
 
 void PhysicalObject::applyScale(glm::vec3 vector) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * scale(vector) * translation(-pos);
+	ModelMatrix = scale(vector);
 }
 
 void PhysicalObject::applyScaleAlongAxis(float k, glm::vec3 axis) {

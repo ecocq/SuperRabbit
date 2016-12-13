@@ -39,7 +39,9 @@ private:
 	GLuint vertexbuffer;
 
 	std::vector<glm::vec4> geometric_vertex;
+	std::vector<glm::vec4> initial_geometric_vertex;
 	std::vector<glm::vec4> vertex_normals;
+	std::vector<glm::vec4> initial_vertex_normals;
 	std::vector<glm::vec4> geometric_vertex_old;
 	std::vector<glm::vec4> vertex_normals_old;
 };

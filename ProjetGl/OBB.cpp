@@ -20,22 +20,23 @@ OBB::~OBB()
 void OBB::initializePosition() {
 	glm::vec3 point = m_center;
 	/* Set bounding box corners */
-	geometric_vertex.push_back(glm::vec4(m_extremum.xmax, m_extremum.ymax, m_extremum.zmax, 1));
-	geometric_vertex.push_back(glm::vec4(m_extremum.xmax, m_extremum.ymax, m_extremum.zmin, 1));
-	geometric_vertex.push_back(glm::vec4(m_extremum.xmax, m_extremum.ymin, m_extremum.zmax, 1));
-	geometric_vertex.push_back(glm::vec4(m_extremum.xmax, m_extremum.ymin, m_extremum.zmin, 1));
-	geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymax, m_extremum.zmax, 1));
-	geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymax, m_extremum.zmin, 1));
-	geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymin, m_extremum.zmax, 1));
-	geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymin, m_extremum.zmin, 1));
-
+	initial_geometric_vertex.push_back(glm::vec4(m_extremum.xmax, m_extremum.ymax, m_extremum.zmax, 1));
+	initial_geometric_vertex.push_back(glm::vec4(m_extremum.xmax, m_extremum.ymax, m_extremum.zmin, 1));
+	initial_geometric_vertex.push_back(glm::vec4(m_extremum.xmax, m_extremum.ymin, m_extremum.zmax, 1));
+	initial_geometric_vertex.push_back(glm::vec4(m_extremum.xmax, m_extremum.ymin, m_extremum.zmin, 1));
+	initial_geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymax, m_extremum.zmax, 1));
+	initial_geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymax, m_extremum.zmin, 1));
+	initial_geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymin, m_extremum.zmax, 1));
+	initial_geometric_vertex.push_back(glm::vec4(m_extremum.xmin, m_extremum.ymin, m_extremum.zmin, 1));
+	geometric_vertex = initial_geometric_vertex;
 	/* Set bounding box normals */
-	vertex_normals.push_back(glm::vec4(0, 0, 1, 1));
-	vertex_normals.push_back(glm::vec4(0, 0, -1, 1));
-	vertex_normals.push_back(glm::vec4(0, 1, 0, 1));
-	vertex_normals.push_back(glm::vec4(0, -1, 0, 1));
-	vertex_normals.push_back(glm::vec4(1, 0, 0, 1));
-	vertex_normals.push_back(glm::vec4(-1, 0, 0, 1));
+	initial_vertex_normals.push_back(glm::vec4(0, 0, 1, 1));
+	initial_vertex_normals.push_back(glm::vec4(0, 0, -1, 1));
+	initial_vertex_normals.push_back(glm::vec4(0, 1, 0, 1));
+	initial_vertex_normals.push_back(glm::vec4(0, -1, 0, 1));
+	initial_vertex_normals.push_back(glm::vec4(1, 0, 0, 1));
+	initial_vertex_normals.push_back(glm::vec4(-1, 0, 0, 1));
+	vertex_normals = initial_vertex_normals;
 }
 
 void OBB::restore() {
@@ -49,14 +50,14 @@ void OBB::transform(glm::mat4 _matrix) {
 
 	/* Transform box coordinates */
 	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = _matrix * geometric_vertex[i];
+		geometric_vertex[i] = _matrix * initial_geometric_vertex[i];
 	}
 	/* Avoid translating normals */
 	_matrix[3][0] = _matrix[3][1] = _matrix[3][2] = 0;
 
 	/* Transform box normals*/
 	for (int i = 0; i < vertex_normals.size(); i++) {
-		vertex_normals[i] = _matrix * vertex_normals[i];
+		vertex_normals[i] = _matrix * initial_vertex_normals[i];
 	}
 }
 
