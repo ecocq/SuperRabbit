@@ -197,6 +197,7 @@ int main(void)
 			objects[i]->execute(MVP);
 		}
 
+		m_rabbit->printIfReached(glm::vec3(21.0f, -3.0f, -1.0f), "You win!");
 		carrot->animateTrans(glm::vec3(20.0f, 0.0f, 0.0f), (std::clock() - start) / (double)CLOCKS_PER_SEC);
 
 		// Swap buffers
