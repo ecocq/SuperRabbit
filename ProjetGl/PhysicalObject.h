@@ -38,7 +38,7 @@ public:
 
 	int initialize(glm::mat4 MVP);
 	int execute(glm::mat4 MVP);
-	void animateTrans(glm::vec3 direction);
+	void animateTrans(glm::vec3 direction, double duration);
 	virtual void fix_vertex(glm::mat4 MVP);
 	virtual void applyTransformsFromControls();
 	void colliderTrans();

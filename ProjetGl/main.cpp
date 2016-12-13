@@ -160,8 +160,7 @@ int main(void)
 		objects[i]->initialize(MVP);
 	}
 
-
-
+	std::clock_t start = std::clock();
 
 	do {
 		// Clear the screen
@@ -175,8 +174,6 @@ int main(void)
 		ProjectionMatrix = cam->getProjection();
 		ViewMatrix = cam->getCamView();
 		MVP = ProjectionMatrix * ViewMatrix * glm::mat4(1.0);
-
-		carrot->animateTrans(glm::vec3(20.0f, 0.0f, 0.0f));
 
 		// Send our transformation to the currently bound shader, 
 		// in the "MVP" uniform
@@ -194,10 +191,7 @@ int main(void)
 			objects[i]->execute(MVP);
 		}
 
-		//TODO MOVE TO function translate of carrot object!!
-		printText2D("Let's find", 160, 300, 50);
-		printText2D("the carrot!", 140, 250, 50);
-
+		carrot->animateTrans(glm::vec3(20.0f, 0.0f, 0.0f), (std::clock() - start) / (double)CLOCKS_PER_SEC);
 
 		// Swap buffers
 		glfwSwapBuffers(window);

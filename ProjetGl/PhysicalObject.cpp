@@ -7,6 +7,7 @@
 // Include GLM
 #include <glm/glm.hpp>
 
+#include <common/text2D.hpp>
 #include "PhysicalObject.h"
 #include "ObjParser.h"
 #include "transformation_mat.h"
@@ -196,9 +197,14 @@ void PhysicalObject::applyTranslation(glm::vec3 trans) {
 	ModelMatrix = ModelMatrix * translation(trans);
 }
 
-void PhysicalObject::animateTrans(glm::vec3 direction) {
+void PhysicalObject::animateTrans(glm::vec3 direction, double duration) {
 	if(translated.x < direction.x) {
-		applyTranslation((direction - position) * 0.01);
+		if(duration > 5.0f){
+			applyTranslation((direction - position) * 0.01);
+		}
+
+		printText2D("Let's find", 160, 300, 50);
+		printText2D("the carrot!", 140, 250, 50);
 	}
 }
 
