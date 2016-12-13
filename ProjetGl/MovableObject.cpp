@@ -59,17 +59,17 @@ void MovableObject::applyTransformsFromControls() {
 	}else if (glfwGetKey(window, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, -1, 0)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
-		applyRotation(0, 2, 0);
+		applyRotation(0, 0.1, 0);
 	}else if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
-		applyRotation(0, -2, 0);
+		applyRotation(0, -0.1, 0);
 	}else if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
-		applyRotation(0, 0, -2);
+		applyRotation(0, 0, -0.1);
 	}else if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
-		applyRotation(0, 0, 2);
+		applyRotation(0, 0, 0.1);
 	}else if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
-		applyRotation(2, 0, 0);
+		applyRotation(0.1, 0, 0);
 	}else if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
-		applyRotation(-2, 0, 0);
+		applyRotation(-0.1, 0, 0);
 	}
 
 	if (wheel != 0) {
@@ -88,11 +88,11 @@ void MovableObject::applyTransformsFromControls() {
 	//applyRotationAroundAxis
 
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-		applyScale(glm::vec3(1.2, 1.2, 1.2));
+		applyScale(glm::vec3(1.1, 1.1, 1.1));
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-		applyScale(glm::vec3(0.8, 0.8, 0.8));
+		applyScale(glm::vec3(0.9, 0.9, 0.9));
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {

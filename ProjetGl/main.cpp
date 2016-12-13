@@ -18,6 +18,7 @@ static glm::mat4 MVP;
 
 #include <common/shader.hpp>
 #include <common/texture.hpp>
+#include <common/text2D.hpp>
 #include "Camera.h"
 #include "ObjParser.h"
 #include "PhysicalObject.h"
@@ -139,6 +140,15 @@ int main(void)
 	objects.push_back(new Wall(glm::vec2(0.2f, 4.8f), glm::vec3(15, -2.8f, 0.4f), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 
 	m_rabbit->setObjects(objects);
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->initialize();
+	}
+
+	initText2D("Holstein.DDS");
+
+
 	//Init camera
 	Camera* cam = new Camera();
 	cam->execute(window);
@@ -189,6 +199,11 @@ int main(void)
 		{
 			objects[i]->execute(MVP);
 		}
+
+		//TODO MOVE TO function translate of carrot object!!
+		printText2D("Let's find", 160, 300, 50);
+		printText2D("the carrot!", 140, 250, 50);
+
 
 		// Swap buffers
 		glfwSwapBuffers(window);
