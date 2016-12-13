@@ -47,9 +47,9 @@ void MovableObject::setObjects(std::vector<PhysicalObject*> _objects) {
 
 
 void MovableObject::applyTransformsFromControls() {
-	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(-1, 0, 0)* speed);
-	}else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
+	}else if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(1, 0, 0)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, 0, -1)* speed);
@@ -59,17 +59,17 @@ void MovableObject::applyTransformsFromControls() {
 		applyTranslation(glm::vec3(0, 1, 0)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, -1, 0)* speed);
-	}else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+	}else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
 		applyRotation(0, 0.1, 0);
-	}else if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
+	}else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
 		applyRotation(0, -0.1, 0);
-	}else if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
-		applyRotation(0, 0, -0.1);
-	}else if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
-		applyRotation(0, 0, 0.1);
 	}else if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
-		applyRotation(0.1, 0, 0);
+		applyRotation(0, 0, -0.1);
 	}else if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
+		applyRotation(0, 0, 0.1);
+	}else if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
+		applyRotation(0.1, 0, 0);
+	}else if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
 		applyRotation(-0.1, 0, 0);
 	}
 
