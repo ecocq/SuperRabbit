@@ -27,10 +27,7 @@ void MovableObject::fix_vertex(glm::mat4 MVP) {
 	// Ignore first object
 	for (int i = 1; i < m_objects.size(); i++) {
 		if (m_OBB.collides(m_objects[i]->m_OBB)) {
-			m_OBB.restore();
-			translated = translated_old;
 			ModelMatrix = glm::mat4(1.0);
-			return;
 		}
 	}
 

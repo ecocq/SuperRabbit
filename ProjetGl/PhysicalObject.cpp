@@ -153,9 +153,7 @@ int PhysicalObject::execute(glm::mat4 MVP) {
 
 
 	//Apply transformations on all points
-
 	fix_vertex(MVP);
-
 
 	// Draw the triangle !
 	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
