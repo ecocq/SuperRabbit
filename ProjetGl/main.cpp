@@ -141,13 +141,7 @@ int main(void)
 
 	m_rabbit->setObjects(objects);
 
-	for (int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->initialize();
-	}
-
 	initText2D("Holstein.DDS");
-
 
 	//Init camera
 	Camera* cam = new Camera();
