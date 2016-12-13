@@ -32,9 +32,11 @@ void MovableObject::fix_vertex(glm::mat4 MVP) {
 	}
 
 	GLint MVPHandle = glGetUniformLocation(programID, "MVP");
+	GLint ViewID = glGetUniformLocation(programID, "model");
 	CompleteModelMatrix = CompleteModelMatrix * ModelMatrix;
 	glm::mat4 MVPMatrix = MVP * CompleteModelMatrix;
 	glUniformMatrix4fv(MVPHandle, 1, GL_FALSE, &MVPMatrix[0][0]);
+	glUniformMatrix4fv(ViewID, 1, GL_FALSE, &CompleteModelMatrix[0][0]);
 }
 
 void MovableObject::setObjects(std::vector<PhysicalObject*> _objects) {
