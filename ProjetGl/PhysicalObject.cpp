@@ -64,6 +64,7 @@ int PhysicalObject::initialize(glm::mat4 MVP) {
 
 	fix_vertex(MVP);
 
+
 	textures_coords_valid = (texture_coords.size() > 0 ? true : false);
 	normals_valid = (vertex_normals.size() > 0 ? true : false);
 
@@ -78,6 +79,14 @@ int PhysicalObject::initialize(glm::mat4 MVP) {
 	}
 
 	if (normals_valid) {
+
+		glm::mat4 ModelWithoutTrans = ModelMatrix;
+		/* Avoid translating normals */
+		ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
+		for (int i = 0; i < vertex_normals.size(); i++) {
+			glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
+			vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
+		}
 		glGenBuffers(1, &normalbuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
 		glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
