@@ -29,7 +29,7 @@ protected:
 	bool normals_valid;
 
 	const char* ObjPath;
-	float speed = 0.1f;
+	float speed = 0.02f;
 
 public:
 	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::mat4 initialPos = glm::mat4(1.0));

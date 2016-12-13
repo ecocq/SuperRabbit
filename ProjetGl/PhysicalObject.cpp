@@ -68,8 +68,7 @@ int PhysicalObject::initialize(glm::mat4 MVP) {
 
 
 	textures_coords_valid = (texture_coords.size() > 0 ? true : false);
-	normals_valid = (vertex_normals.size() > 0 ? true : false);
-
+	normals_valid = (vertex_normals.size() > 0 ? true : false);
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
