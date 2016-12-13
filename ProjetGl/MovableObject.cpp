@@ -20,7 +20,9 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID) : PhysicalObject(path, objcolor, fragShader, Objwindow, programID) {
 	glfwSetScrollCallback(window, scroll_callback);
 }
-MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, programID, initialPos) { }
+MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, programID, initialPos) { 
+	glfwSetScrollCallback(window, scroll_callback);
+}
 void MovableObject::fix_vertex(glm::mat4 MVP) {
 	m_OBB.transform(CompleteModelMatrix * ModelMatrix);
 
