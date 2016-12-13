@@ -32,6 +32,11 @@ void MovableObject::fix_vertex(glm::mat4 MVP) {
 			ModelMatrix = glm::mat4(1.0);
 		}
 	}
+	float pos_x = (CompleteModelMatrix * glm::vec4(0, 0, 0, 1)).x;
+	if (scale_factor < 1.0f && (pos_x < 5.0f || pos_x > 11.5f)) {
+		ModelMatrix = scale(glm::vec3(1.0 / scale_factor, 1.0 / scale_factor, 1.0 / scale_factor));
+		scale_factor = 1.0f;
+	}
 
 	GLint MVPHandle = glGetUniformLocation(programID, "MVP");
 	GLint ViewID = glGetUniformLocation(programID, "model");
@@ -74,12 +79,10 @@ void MovableObject::applyTransformsFromControls() {
 	}
 
 	if (wheel != 0) {
-		if (wheel > 0 && scale > -20) {
-			scale--;
+		if (wheel > 0) {
 			applyScale(glm::vec3(1.2, 1.2, 1.2));
 		}
-		else if (wheel < 0 && scale < 20) {
-			scale++;
+		else if (wheel < 0) {
 			this->applyScale(glm::vec3(0.8, 0.8, 0.8));
 		}
 		wheel = 0;
