@@ -175,7 +175,6 @@ void PhysicalObject::applyTransformsFromControls() {
 }
 
 void PhysicalObject::printIfReached(glm::vec3 direction, char* text) {
-	std::cout << this->CompleteModelMatrix[3][0] << " " << this->CompleteModelMatrix[3][1] << " " << this->CompleteModelMatrix[3][2] << std::endl;
 	if (CompleteModelMatrix[3][0] > direction.x && CompleteModelMatrix[3][1] > direction.y && CompleteModelMatrix[3][2] > direction.z) {
 		printText2D(text, 170, 270, 50);
 	}
