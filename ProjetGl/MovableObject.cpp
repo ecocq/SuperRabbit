@@ -101,11 +101,11 @@ void MovableObject::applyTransformsFromControls() {
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-		applyShearingYZ(1.2, -0.5);
+		applyShearingYZ(0.01, 0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
-		applyShearingYZ(-1.2, 0.5);
+		applyShearingYZ(-0.01, 0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) {
