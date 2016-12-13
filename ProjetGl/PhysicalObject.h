@@ -21,6 +21,7 @@ protected:
 	glm::vec3 position;
 
 	glm::mat4 ModelMatrix;
+	glm::mat4 CompleteModelMatrix;
 	glm::vec3 translated;
 	glm::vec3 translated_old;
 
@@ -28,6 +29,7 @@ protected:
 	bool normals_valid;
 
 	const char* ObjPath;
+	float speed = 0.1f;
 
 public:
 	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::mat4 initialPos = glm::mat4(1.0));
@@ -38,7 +40,6 @@ public:
 	int execute(glm::mat4 MVP);
 	void animateTrans(glm::vec3 direction);
 	virtual void fix_vertex(glm::mat4 MVP);
-	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
 	virtual void applyTransformsFromControls();
 	void colliderTrans();
 	void applyTranslation(glm::vec3 trans);

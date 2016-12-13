@@ -22,19 +22,21 @@ MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragSh
 }
 
 void MovableObject::fix_vertex(glm::mat4 MVP) {
-	m_OBB.transform(ModelMatrix);
+	m_OBB.transform(CompleteModelMatrix * ModelMatrix);
 
 	// Ignore first object
 	for (int i = 1; i < m_objects.size(); i++) {
 		if (m_OBB.collides(m_objects[i]->m_OBB)) {
 			m_OBB.restore();
 			translated = translated_old;
+			ModelMatrix = glm::mat4(1.0);
 			return;
 		}
 	}
 
 	GLint MVPHandle = glGetUniformLocation(programID, "MVP");
-	glm::mat4 MVPMatrix = MVP * ModelMatrix;
+	CompleteModelMatrix = CompleteModelMatrix * ModelMatrix;
+	glm::mat4 MVPMatrix = MVP * CompleteModelMatrix;
 	glUniformMatrix4fv(MVPHandle, 1, GL_FALSE, &MVPMatrix[0][0]);
 }
 
@@ -45,17 +47,17 @@ void MovableObject::setObjects(std::vector<PhysicalObject*> _objects) {
 
 void MovableObject::applyTransformsFromControls() {
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0, 0, 0.2));
+		applyTranslation(glm::vec3(-1, 0, 0)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0, 0, -0.2));
+		applyTranslation(glm::vec3(1, 0, 0)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(-0.2, 0, 0));
+		applyTranslation(glm::vec3(0, 0, -1)* speed);
 	}else if(glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0.2 ,0, 0));
+		applyTranslation(glm::vec3(0, 0, 1)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0, 0.2, 0));
+		applyTranslation(glm::vec3(0, 1, 0)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
-		applyTranslation(glm::vec3(0, -0.2, 0));
+		applyTranslation(glm::vec3(0, -1, 0)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
 		applyRotation(0, 2, 0);
 	}else if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {

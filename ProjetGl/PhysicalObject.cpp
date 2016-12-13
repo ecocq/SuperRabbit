@@ -20,6 +20,7 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	window = Objwindow;
 	position = glm::vec3(0, 0, 0);
 	ModelMatrix = initialTrans;	
+	CompleteModelMatrix = glm::mat4(1.0);
 	this->programID = programID;
 }
 
@@ -39,12 +40,13 @@ PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::ve
 
 void PhysicalObject::fix_vertex(glm::mat4 MVP) {
 
-	m_OBB.transform(ModelMatrix);
+	m_OBB.transform(CompleteModelMatrix);
 
 	colliderTrans();
 
 	GLint MVPHandle = glGetUniformLocation(programID, "MVP");
-	glm::mat4 MVPMatrix = MVP * ModelMatrix;
+	CompleteModelMatrix = CompleteModelMatrix * ModelMatrix;
+	glm::mat4 MVPMatrix = MVP * CompleteModelMatrix;
 	glUniformMatrix4fv(MVPHandle, 1, GL_FALSE, &MVPMatrix[0][0]);
 }
 
@@ -92,7 +94,7 @@ int PhysicalObject::initialize(glm::mat4 MVP) {
 		glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
 	}
 
-	//ModelMatrix = glm::mat4(1.0);
+	ModelMatrix = glm::mat4(1.0);
 	translated = glm::vec3(0);
 
 	return 0;
@@ -107,10 +109,6 @@ int PhysicalObject::execute(glm::mat4 MVP) {
 	// 1rst attribute buffer : vertices
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	if (ModelMatrix != glm::mat4(1.0)) {
-		glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
-		
-	}
 	glVertexAttribPointer(
 		0,                  // attribute
 		4,                  // size
@@ -137,9 +135,6 @@ int PhysicalObject::execute(glm::mat4 MVP) {
 	if (normals_valid) {
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-		if (ModelMatrix != glm::mat4(1.0)) {
-			glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
-		}
 		glVertexAttribPointer(
 			2,                                // attribute
 			3,                                // size
@@ -165,7 +160,7 @@ int PhysicalObject::execute(glm::mat4 MVP) {
 
 	m_OBB.execute();
 
-	//ModelMatrix = glm::mat4(1.0);
+	ModelMatrix = glm::mat4(1.0);
 
 	return 0;
 }
@@ -179,36 +174,6 @@ PhysicalObject::~PhysicalObject()
 	}
 }
 
-/* Init transforms  */
-void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
-
-	if (rotate != glm::vec3(0, 0, 0)) {
-		if (rotate.x != 0) {
-			ModelMatrix = ModelMatrix * rotation_x(rotate.x);
-		}
-		if (rotate.y != 0) {
-			ModelMatrix = ModelMatrix * rotation_y(rotate.y);
-		}
-		if (rotate.z != 0) {
-			ModelMatrix = ModelMatrix * rotation_z(rotate.z);
-		}
-	}
-	if (translate != glm::vec3(0, 0, 0)) {
-		applyTranslation(translate);
-	}
-	//Apply transformations on all points
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-	}
-	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
-
-	glDisableVertexAttribArray(0);
-
-	//ModelMatrix = glm::mat4(1.0);
-}
 
 /* This function will be a default control transforms function
 We should use inheritance to redefine according to objects behaviors */
@@ -245,7 +210,7 @@ void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) 
 	}
 
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * rotationMatrix * translation(-pos);
+	ModelMatrix = ModelMatrix * rotationMatrix;
 }
 
 void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
@@ -255,7 +220,7 @@ void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
 
 void PhysicalObject::applyScale(glm::vec3 vector) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * scale(vector) * translation(-pos);
+	ModelMatrix = scale(vector);
 }
 
 void PhysicalObject::applyScaleAlongAxis(float k, glm::vec3 axis) {
