@@ -46,15 +46,15 @@ void Camera::execute(GLFWwindow *window)
 		position = orthographic_projection(glm::vec3(0, 1, 0)) *translation(-cartesian_dir_right * speed) * position;
 	}
 
-	if (position.z > 4) {
-		position.z = 4;
+	if (position.z > 3.9) {
+		position.z = 3.9;
 	}
-	if (position.z < -1) {
-		position.z = -1;
+	if (position.z < -0.9) {
+		position.z = -0.9;
 	}
 
-	if (position.x < -3) {
-		position.x = -3;
+	if (position.x < -2.9) {
+		position.x = -2.9;
 	}
 	if (position.x > 40) {
 		position.x = 40;

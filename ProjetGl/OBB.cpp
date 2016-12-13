@@ -62,7 +62,7 @@ void OBB::transform(glm::mat4 _matrix) {
 }
 
 /* Draw bounding box */
-void OBB::execute() {
+void OBB::execute() {/*
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);
@@ -79,7 +79,7 @@ void OBB::execute() {
 
 	glDrawArrays(GL_LINES, 0, geometric_vertex.size());
 
-	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(0);*/
 }
 
 void SATtest(const glm::vec4 axis, const std::vector<glm::vec4> vertex, float& min, float& max)
