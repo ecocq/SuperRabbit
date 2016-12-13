@@ -213,7 +213,7 @@ void PhysicalObject::applyRotation(float angle_x, float angle_y, float angle_z) 
 
 void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * rotation_around_axis(angle_d, vect) * translation(-pos);
+	ModelMatrix = ModelMatrix * rotation_around_axis(angle_d, vect);
 }
 
 void PhysicalObject::applyScale(glm::vec3 vector) {
@@ -223,34 +223,34 @@ void PhysicalObject::applyScale(glm::vec3 vector) {
 
 void PhysicalObject::applyScaleAlongAxis(float k, glm::vec3 axis) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * scale_along_axis(k, axis) * translation(-pos);
+	ModelMatrix = ModelMatrix * scale_along_axis(k, axis);
 }
 
 void PhysicalObject::applyOrthographicProjection(glm::vec3 axis) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * orthographic_projection(axis) * translation(-pos);
+	ModelMatrix = ModelMatrix * orthographic_projection(axis);
 }
 
 void PhysicalObject::applyReflection(glm::vec3 axis) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * reflection(axis) * translation(-pos);
+	ModelMatrix = ModelMatrix * reflection(axis);
 }
 void PhysicalObject::applyShearOrNot(bool unshear) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * shear(unshear) * translation(-pos);
+	ModelMatrix = ModelMatrix * shear(unshear);
 }
 
 void PhysicalObject::applyShearingXY(float s, float t) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * shearing_xy(s, t) * translation(-pos);
+	ModelMatrix = ModelMatrix * shearing_xy(s, t);
 }
 
 void PhysicalObject::applyShearingXZ(float s, float t) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * shearing_xz(s, t) * translation(-pos);
+	ModelMatrix = ModelMatrix * shearing_xz(s, t);
 }
 
 void PhysicalObject::applyShearingYZ(float s, float t) {
 	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * translation(pos) * shearing_yz(s, t) * translation(-pos);
+	ModelMatrix = ModelMatrix * shearing_yz(s, t);
 }
