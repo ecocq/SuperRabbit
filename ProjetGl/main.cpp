@@ -139,6 +139,12 @@ int main(void)
 	objects.push_back(new Wall(glm::vec2(3.4f, 5.0f), glm::vec3(15, -3, 0.6f), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 	objects.push_back(new Wall(glm::vec2(0.2f, 4.8f), glm::vec3(15, -2.8f, 0.4f), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 
+	// Obstacle Shear
+	objects.push_back(new Wall(glm::vec2(1, 5), glm::vec3(20, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(4, 3.5f), glm::vec3(20, -1.5f, 0), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(3, 3), glm::vec3(20, -3, 0), glm::vec3(45, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(3, 4), glm::vec3(20, -3, 1), glm::vec3(-45, 90, 0), wallColor, fragColor, window, programID));
+
 	m_rabbit->setObjects(objects);
 
 	initText2D("Holstein.DDS");
