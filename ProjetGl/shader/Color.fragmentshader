@@ -14,7 +14,7 @@ uniform vec3 m_fragColor;
 void main(){
 	// Light emission definition. Can be moved to C++
 	vec3 LightColor = vec3(1,1,1);
-	float LightPower = 25.0f;
+	float LightPower = 10.0f;
 	vec4 LightPosition = vec4(0,5,0,1);
 
 	// Material properties
@@ -51,8 +51,8 @@ void main(){
 	color = 
 		// Ambient : simulates indirect lighting
 		MaterialAmbientColor;
-	for(int n = 1; n <= 10; n++){
-	vec4 LightPosition = vec4(n*5-1,2,0,1);
+	for(int n = 0; n <= 10; n++){
+	vec4 LightPosition = vec4(n*5-2.5,2.5,1.5,1);
 	float distance = length( LightPosition - vertexPosition_world );
 	color = color + 
 			// Diffuse : "color" of the object

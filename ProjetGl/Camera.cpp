@@ -10,9 +10,10 @@
 
 Camera::Camera()
 {
-	position = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	position = glm::vec4(-2.0f, 0.0f, 1.5f, 1.0f);
 	speed = 0.1f;
 	angle = 0.0f;
+	verticalAngle = -15;
 }
 
 void Camera::execute(GLFWwindow *window)
@@ -46,15 +47,15 @@ void Camera::execute(GLFWwindow *window)
 		position = orthographic_projection(glm::vec3(0, 1, 0)) *translation(-cartesian_dir_right * speed) * position;
 	}
 
-	if (position.z > 3.9) {
-		position.z = 3.9;
+	if (position.z > 3.8) {
+		position.z = 3.8;
 	}
-	if (position.z < -0.9) {
-		position.z = -0.9;
+	if (position.z < -0.8) {
+		position.z = -0.8;
 	}
 
-	if (position.x < -2.9) {
-		position.x = -2.9;
+	if (position.x < -2.8) {
+		position.x = -2.8;
 	}
 	if (position.x > 40) {
 		position.x = 40;
