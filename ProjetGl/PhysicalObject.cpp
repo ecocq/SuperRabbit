@@ -27,6 +27,9 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	position = initialPos;
 }
 
+void PhysicalObject::colliderTrans()
+{
+}
 
 PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject("NONE", objcolor, fragShader, Objwindow)
 {
@@ -35,11 +38,23 @@ PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::ve
 
 void PhysicalObject::fix_vertex() {
 
+	m_OBB.transform(ModelMatrix);
+
+	colliderTrans();
+
 	for (int i = 0; i < geometric_vertex.size(); i++) {
 		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
 	}
 	// TODO transform normals obj ....
-	m_OBB.transform(ModelMatrix);
+
+	glm::mat4 ModelWithoutTrans = ModelMatrix;
+	/* Avoid translating normals */
+	ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
+
+	for (int i = 0; i < vertex_normals.size(); i++) {
+		glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
+		vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
+	}
 
 }
 

@@ -39,6 +39,7 @@ public:
 	virtual void fix_vertex();
 	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
 	virtual void applyTransformsFromControls();
+	void colliderTrans();
 	void applyTranslation(glm::vec3 trans);
 	void applyRotation(float angle_x, float angle_y, float angle_z);
 	void applyRotationAroundAxis(float angle_d, glm::vec3 vect);

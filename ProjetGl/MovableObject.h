@@ -6,10 +6,13 @@ public:
 
 	void applyTransformsFromControls();
 	void fix_vertex();
+	void colliderTrans();
 
 	void setObjects(std::vector<PhysicalObject*> _objects);
 
 private:
+
+	int scale = 0;
 	std::vector<PhysicalObject*> m_objects;
 };
 
