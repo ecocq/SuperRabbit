@@ -111,7 +111,6 @@ int main(void)
 	PhysicalObject* carrot = new PhysicalObject("obj/carrot.obj", glm::vec3(1.0f, 0.6f, 0.03f), fragColor, window, programID, rotation_x(90) * translation(glm::vec3(2, 0, 0)));
 	objects.push_back(m_rabbit);
 	objects.push_back(carrot);
-	objects.push_back(new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 0.0f), fragColor, window, programID, glm::vec3(0, 0, 4)));
 
 	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, -10)));
 	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, 10)));
