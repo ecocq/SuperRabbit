@@ -9,7 +9,7 @@ glm::mat4 translation(glm::vec3 trans) {
 	};
 	glm::mat4 trans_mat = glm::make_mat4(trans_);
 	return trans_mat;
-}
+};
 
 glm::mat4 rotation_x(float angle_d) {
 	float angle = angle_d * PI / 180.0f;

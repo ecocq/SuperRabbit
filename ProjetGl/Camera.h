@@ -5,6 +5,9 @@ private:
 	glm::vec4 position;
 	float speed;
 	float angle;
+	float horizontalAngle = 0.0f;
+	float verticalAngle = 0.0f;
+	float mouseSpeed = 0.1f;
 	glm::mat4 CamViewMatrice;
 	glm::mat4 projection;
 
