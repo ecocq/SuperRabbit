@@ -12,7 +12,7 @@
 #include "transformation_mat.h"
 
 
-PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::mat4 initialTrans)
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::mat4 initialTrans)
 {
 	ObjPath = path;
 	m_color = objcolor;
@@ -20,9 +20,10 @@ PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint frag
 	window = Objwindow;
 	position = glm::vec3(0, 0, 0);
 	ModelMatrix = initialTrans;	
+	this->programID = programID;
 }
 
-PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, translation(initialPos))
+PhysicalObject::PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::vec3 initialPos) : PhysicalObject(path, objcolor, fragShader, Objwindow, programID, translation(initialPos))
 {
 	position = initialPos;
 }
@@ -31,34 +32,23 @@ void PhysicalObject::colliderTrans()
 {
 }
 
-PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject("NONE", objcolor, fragShader, Objwindow)
+PhysicalObject::PhysicalObject(std::vector<glm::vec4> _geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID) : PhysicalObject("NONE", objcolor, fragShader, Objwindow, programID)
 {
 	geometric_vertex = _geometric_vertex;
 }
 
-void PhysicalObject::fix_vertex() {
+void PhysicalObject::fix_vertex(glm::mat4 MVP) {
 
 	m_OBB.transform(ModelMatrix);
 
 	colliderTrans();
 
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-	}
-	// TODO transform normals obj ....
-
-	glm::mat4 ModelWithoutTrans = ModelMatrix;
-	/* Avoid translating normals */
-	ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
-
-	for (int i = 0; i < vertex_normals.size(); i++) {
-		glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
-		vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
-	}
-
+	GLint MVPHandle = glGetUniformLocation(programID, "MVP");
+	glm::mat4 MVPMatrix = MVP * ModelMatrix;
+	glUniformMatrix4fv(MVPHandle, 1, GL_FALSE, &MVPMatrix[0][0]);
 }
 
-int PhysicalObject::initialize() {
+int PhysicalObject::initialize(glm::mat4 MVP) {
 	extremum _extremum;
 
 	if (ObjPath != "NONE" && !loadObjFile(ObjPath, geometric_vertex, texture_coords, vertex_normals, _extremum)) {
@@ -72,9 +62,7 @@ int PhysicalObject::initialize() {
 
 	m_OBB = OBB(glm::vec3(0, 0, 0), _extremum);
 
-	if (ModelMatrix != glm::mat4(1.0)) {
-		fix_vertex();
-	}
+	fix_vertex(MVP);
 
 	textures_coords_valid = (texture_coords.size() > 0 ? true : false);
 	normals_valid = (vertex_normals.size() > 0 ? true : false);
@@ -95,13 +83,13 @@ int PhysicalObject::initialize() {
 		glBufferData(GL_ARRAY_BUFFER, vertex_normals.size() * sizeof(glm::vec3), &vertex_normals[0], GL_STATIC_DRAW);
 	}
 
-	ModelMatrix = glm::mat4(1.0);
+	//ModelMatrix = glm::mat4(1.0);
 	translated = glm::vec3(0);
 
 	return 0;
 }
 
-int PhysicalObject::execute() {
+int PhysicalObject::execute(glm::mat4 MVP) {
 	glUniform3fv(fragmentShader, 1, &m_color[0]);
 
 	// Compute the model matrix from keyboard and mouse input
@@ -155,9 +143,8 @@ int PhysicalObject::execute() {
 
 
 	//Apply transformations on all points
-	if (ModelMatrix != glm::mat4(1.0)) {
-		fix_vertex();
-	}
+
+	fix_vertex(MVP);
 
 
 	// Draw the triangle !
@@ -169,7 +156,7 @@ int PhysicalObject::execute() {
 
 	m_OBB.execute();
 
-	ModelMatrix = glm::mat4(1.0);
+	//ModelMatrix = glm::mat4(1.0);
 
 	return 0;
 }
@@ -211,7 +198,7 @@ void PhysicalObject::initTransforms(glm::vec3 translate, glm::vec3 rotate) {
 
 	glDisableVertexAttribArray(0);
 
-	ModelMatrix = glm::mat4(1.0);
+	//ModelMatrix = glm::mat4(1.0);
 }
 
 /* This function will be a default control transforms function

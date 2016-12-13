@@ -1,3 +1,6 @@
+// Include GLEW
+#include <GL/glew.h>
+
 // Include GLFW
 #include <glfw3.h>
 
@@ -14,11 +17,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	wheel = yoffset;
 }
 
-MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow) : PhysicalObject(path, objcolor, fragShader, Objwindow) { 	
+MovableObject::MovableObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID) : PhysicalObject(path, objcolor, fragShader, Objwindow, programID) {
 	glfwSetScrollCallback(window, scroll_callback);
 }
 
-void MovableObject::fix_vertex() {
+void MovableObject::fix_vertex(glm::mat4 MVP) {
 	m_OBB.transform(ModelMatrix);
 
 	// Ignore first object
@@ -30,18 +33,9 @@ void MovableObject::fix_vertex() {
 		}
 	}
 
-	for (int i = 0; i < geometric_vertex.size(); i++) {
-		geometric_vertex[i] = ModelMatrix * geometric_vertex[i];
-	}
-
-	glm::mat4 ModelWithoutTrans = ModelMatrix;
-	/* Avoid translating normals */
-	ModelWithoutTrans[3][0] = ModelWithoutTrans[3][1] = ModelWithoutTrans[3][2] = 0;
-
-	for (int i = 0; i < vertex_normals.size(); i++) {
-		glm::vec4 normal(vertex_normals[i].x, vertex_normals[i].y, vertex_normals[i].z, 1);
-		vertex_normals[i] = glm::vec3(ModelWithoutTrans * normal);
-	}
+	GLint MVPHandle = glGetUniformLocation(programID, "MVP");
+	glm::mat4 MVPMatrix = MVP * ModelMatrix;
+	glUniformMatrix4fv(MVPHandle, 1, GL_FALSE, &MVPMatrix[0][0]);
 }
 
 void MovableObject::setObjects(std::vector<PhysicalObject*> _objects) {

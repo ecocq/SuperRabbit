@@ -11,6 +11,7 @@ protected:
 	GLuint uvbuffer;
 	GLuint normalbuffer;
 	GLuint fragmentShader;
+	GLint programID;
 
 	std::vector<glm::vec4> geometric_vertex;
 	std::vector<glm::vec3> texture_coords;
@@ -29,14 +30,14 @@ protected:
 	const char* ObjPath;
 
 public:
-	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::mat4 initialPos = glm::mat4(1.0));
-	PhysicalObject(std::vector<glm::vec4> geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow);
-	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, glm::vec3 initialPos);
+	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::mat4 initialPos = glm::mat4(1.0));
+	PhysicalObject(std::vector<glm::vec4> geometric_vertex, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID);
+	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::vec3 initialPos);
 
-	int initialize();
-	int execute();
+	int initialize(glm::mat4 MVP);
+	int execute(glm::mat4 MVP);
 	void animateTrans(glm::vec3 direction);
-	virtual void fix_vertex();
+	virtual void fix_vertex(glm::mat4 MVP);
 	void initTransforms(glm::vec3 translate, glm::vec3 rotate);
 	virtual void applyTransformsFromControls();
 	void colliderTrans();

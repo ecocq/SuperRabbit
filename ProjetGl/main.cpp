@@ -14,6 +14,7 @@ GLFWwindow* window;
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
+static glm::mat4 MVP;
 
 #include <common/shader.hpp>
 #include <common/texture.hpp>
@@ -23,6 +24,8 @@ using namespace glm;
 #include "MovableObject.h"
 #include "transformation_mat.h"
 #include "Wall.h"
+
+
 
 int main(void)
 {
@@ -104,50 +107,56 @@ int main(void)
 
 	//Init objects
 	std::vector<PhysicalObject*> objects;
-	MovableObject* m_rabbit = new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window);
-	PhysicalObject* carrot = new PhysicalObject("obj/carrot.obj", glm::vec3(1.0f, 0.6f, 0.03f), fragColor, window, rotation_x(90) * translation(glm::vec3(2, 0, 0)));
+	MovableObject* m_rabbit = new MovableObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, programID);
+	PhysicalObject* carrot = new PhysicalObject("obj/carrot.obj", glm::vec3(1.0f, 0.6f, 0.03f), fragColor, window, programID, rotation_x(90) * translation(glm::vec3(2, 0, 0)));
 	objects.push_back(m_rabbit);
 	objects.push_back(carrot);
-	objects.push_back(new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 0.0f), fragColor, window, glm::vec3(0, 0, 4)));
+	objects.push_back(new PhysicalObject("obj/Rabbit.obj", glm::vec3(1.0f, 1.0f, 0.0f), fragColor, window, programID, glm::vec3(0, 0, 4)));
 
 	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, -10)));
 	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, 10)));
 	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, rotation_x(90) * translation(glm::vec3(0,-10,-1))));
 	// Walls and obstacles
 	glm::vec3 wallColor(0.5f, 0.5f, 0.5f);
-	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(0, -3, -1), glm::vec3(0, 0, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(0, -3, -1), glm::vec3(-90, 0, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(0, -3, 4), glm::vec3(0, 0, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(0, 2, -1), glm::vec3(-90, 0, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(0, -3, -1), glm::vec3(0, 0, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(0, -3, -1), glm::vec3(-90, 0, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(0, -3, 4), glm::vec3(0, 0, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(0, 2, -1), glm::vec3(-90, 0, 0), wallColor, fragColor, window, programID));
 
 	// Obstacle 1
-	objects.push_back(new Wall(glm::vec2(2, 5), glm::vec3(5, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(2, 5), glm::vec3(5, -3, 2), glm::vec3(0, 90, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(1, 3), glm::vec3(5, -3, 1), glm::vec3(0, 90, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(2, 5), glm::vec3(5, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(2, 5), glm::vec3(5, -3, 2), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(1, 3), glm::vec3(5, -3, 1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 	
 	// Obstacle Scale
-	objects.push_back(new Wall(glm::vec2(1.4f, 5.0f), glm::vec3(10, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(3.4f, 5.0f), glm::vec3(10, -3, 0.6f), glm::vec3(0, 90, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(0.2f, 4.8f), glm::vec3(10.0f, -2.8f, 0.4f), glm::vec3(0, 90, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(1.4f, 5.0f), glm::vec3(10, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(3.4f, 5.0f), glm::vec3(10, -3, 0.6f), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(0.2f, 4.8f), glm::vec3(10.0f, -2.8f, 0.4f), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 	
 	// Obstacle Scale
-	objects.push_back(new Wall(glm::vec2(1.4f, 5.0f), glm::vec3(15, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(3.4f, 5.0f), glm::vec3(15, -3, 0.6f), glm::vec3(0, 90, 0), wallColor, fragColor, window));
-	objects.push_back(new Wall(glm::vec2(0.2f, 4.8f), glm::vec3(15, -2.8f, 0.4f), glm::vec3(0, 90, 0), wallColor, fragColor, window));
+	objects.push_back(new Wall(glm::vec2(1.4f, 5.0f), glm::vec3(15, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(3.4f, 5.0f), glm::vec3(15, -3, 0.6f), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(0.2f, 4.8f), glm::vec3(15, -2.8f, 0.4f), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 
 	m_rabbit->setObjects(objects);
-
-	for (int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->initialize();
-	}
-
 	//Init camera
 	Camera* cam = new Camera();
 	cam->execute(window);
 	glm::mat4 ProjectionMatrix;
 	glm::mat4 ViewMatrix;
 	glm::mat4 MVP;
+
+	cam->execute(window);
+	ProjectionMatrix = cam->getProjection();
+	ViewMatrix = cam->getCamView();
+	MVP = ProjectionMatrix * ViewMatrix * glm::mat4(1.0);
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->initialize(MVP);
+	}
+
+
 
 
 	do {
@@ -178,7 +187,7 @@ int main(void)
 
 		for (int i = 0; i < objects.size(); i++)
 		{
-			objects[i]->execute();
+			objects[i]->execute(MVP);
 		}
 
 		// Swap buffers
