@@ -12,8 +12,6 @@ public:
 	void setObjects(std::vector<PhysicalObject*> _objects);
 
 private:
-
-	int scale = 0;
 	std::vector<PhysicalObject*> m_objects;
 };
 

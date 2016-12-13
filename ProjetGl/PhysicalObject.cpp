@@ -217,8 +217,11 @@ void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
 }
 
 void PhysicalObject::applyScale(glm::vec3 vector) {
-	glm::vec3 pos = position + translated;
-	ModelMatrix = scale(vector);
+	float pos_x = (CompleteModelMatrix * glm::vec4(0, 0, 0, 1)).x;
+	if (scale_factor > 0.05f && pos_x >= 5.0f && pos_x <= 11.5f) {
+		ModelMatrix = scale(vector);
+		scale_factor *= vector.x;
+	} 
 }
 
 void PhysicalObject::applyScaleAlongAxis(float k, glm::vec3 axis) {
