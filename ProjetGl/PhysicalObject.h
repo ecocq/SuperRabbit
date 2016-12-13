@@ -30,6 +30,8 @@ protected:
 
 	const char* ObjPath;
 	float speed = 0.02f;
+	const float angularSpeed = 1;
+	const float shearSpeed = 0.05f;
 	float scale_factor = 1;
 	bool scalable;
 

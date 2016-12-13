@@ -65,17 +65,17 @@ void MovableObject::applyTransformsFromControls() {
 	}else if (glfwGetKey(window, GLFW_KEY_SEMICOLON) == GLFW_PRESS) {
 		applyTranslation(glm::vec3(0, -1, 0)* speed);
 	}else if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
-		applyRotation(0, 0.1, 0);
+		applyRotation(0, angularSpeed, 0);
 	}else if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) {
-		applyRotation(0, -0.1, 0);
+		applyRotation(0, -angularSpeed, 0);
 	}else if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS) {
-		applyRotation(0, 0, -0.1);
+		applyRotation(0, 0, -angularSpeed);
 	}else if (glfwGetKey(window, GLFW_KEY_COMMA) == GLFW_PRESS) {
-		applyRotation(0, 0, 0.1);
+		applyRotation(0, 0, angularSpeed);
 	}else if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
-		applyRotation(0.1, 0, 0);
+		applyRotation(angularSpeed, 0, 0);
 	}else if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
-		applyRotation(-0.1, 0, 0);
+		applyRotation(-angularSpeed, 0, 0);
 	}
 
 	if (wheel != 0) {
@@ -104,11 +104,11 @@ void MovableObject::applyTransformsFromControls() {
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
-		applyShearingYZ(0.01, 0);
+		applyShearingYZ(shearSpeed, 0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
-		applyShearingYZ(-0.01, 0);
+		applyShearingYZ(-shearSpeed, 0);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) {
