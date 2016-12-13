@@ -17,6 +17,7 @@ using namespace glm;
 
 #include <common/shader.hpp>
 #include <common/texture.hpp>
+#include <common/text2D.hpp>
 #include "Camera.h"
 #include "ObjParser.h"
 #include "PhysicalObject.h"
@@ -142,6 +143,8 @@ int main(void)
 		objects[i]->initialize();
 	}
 
+	initText2D("Holstein.DDS");
+
 	//Init camera
 	Camera* cam = new Camera();
 	cam->execute(window);
@@ -180,6 +183,11 @@ int main(void)
 		{
 			objects[i]->execute();
 		}
+
+		//TODO MOVE TO function translate of carrot object!!
+		printText2D("Let's find", 160, 300, 50);
+		printText2D("the carrot!", 140, 250, 50);
+
 
 		// Swap buffers
 		glfwSwapBuffers(window);
