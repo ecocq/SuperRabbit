@@ -44,14 +44,14 @@ void OBB::transform(glm::mat4 _matrix) {
 	vertex_normals_old = vertex_normals;
 
 	/* Transform box coordinates */
-	for (int i = 0; i < geometric_vertex.size(); i++) {
+	for (int i = 0; i < (int) geometric_vertex.size(); i++) {
 		geometric_vertex[i] = _matrix * initial_geometric_vertex[i];
 	}
 	/* Avoid translating normals */
 	_matrix[3][0] = _matrix[3][1] = _matrix[3][2] = 0;
 
 	/* Transform box normals*/
-	for (int i = 0; i < vertex_normals.size(); i++) {
+	for (int i = 0; i < (int) vertex_normals.size(); i++) {
 		vertex_normals[i] = _matrix * initial_vertex_normals[i];
 	}
 }
@@ -82,7 +82,7 @@ void OBB::execute() {
 void SATtest(const glm::vec4 axis, const std::vector<glm::vec4> vertex, float& min, float& max)
 {
 	min = (float)HUGE, max = (float)-HUGE;
-	for (int i = 0; i < vertex.size(); i++)
+	for (int i = 0; i < (int) vertex.size(); i++)
 	{
 		float dot = glm::dot(glm::vec3(vertex[i]), glm::vec3(axis));
 		if (dot < min)  min = dot;
@@ -101,7 +101,7 @@ bool overlaps(float min1, float max1, float min2, float max2)
 
 /* Is bounding box colliding with another */
 bool OBB::collides(const OBB &other) {
-	for (int i = 0; i < vertex_normals.size(); i++) {
+	for (int i = 0; i < (int) vertex_normals.size(); i++) {
 		float shape1Min, shape1Max, shape2Min, shape2Max;
 		SATtest(vertex_normals[i], geometric_vertex, shape1Min, shape1Max);
 		SATtest(vertex_normals[i], other.geometric_vertex, shape2Min, shape2Max);
