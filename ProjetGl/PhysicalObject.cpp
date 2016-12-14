@@ -145,7 +145,7 @@ int PhysicalObject::execute(glm::mat4 MVP) {
 	fix_vertex(MVP);
 
 	// Draw the triangle !
-	glDrawArrays(GL_TRIANGLES, 0, geometric_vertex.size());
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)geometric_vertex.size());
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);

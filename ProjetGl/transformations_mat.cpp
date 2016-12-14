@@ -12,7 +12,7 @@ glm::mat4 translation(glm::vec3 trans) {
 };
 
 glm::mat4 rotation_x(float angle_d) {
-	float angle = angle_d * PI / 180.0f;
+	float angle = angle_d * (float)PI / 180.0f;
 	float rot_[16] = {
 		1, 0, 0, 0,
 		0, cos(angle), -sin(angle), 0,
@@ -24,7 +24,7 @@ glm::mat4 rotation_x(float angle_d) {
 }
 
 glm::mat4 rotation_y(float angle_d) {
-	float angle = angle_d * PI / 180.0;
+	float angle = (float)(angle_d * PI / 180.0);
 	float rot_[16] = {
 		cos(angle), 0, sin(angle), 0,
 		0, 1, 0, 0,
@@ -36,7 +36,7 @@ glm::mat4 rotation_y(float angle_d) {
 }
 
 glm::mat4 rotation_z(float angle_d) {
-	float angle = angle_d * PI / 180.0;
+	float angle = (float)(angle_d * PI / 180.0);
 	float rot_[16] = {
 		cos(angle), sin(angle), 0, 0,
 		-sin(angle), cos(angle), 0, 0,
@@ -51,7 +51,7 @@ glm::mat4 rotation_around_axis(float angle_d, glm::vec3 vect) {
 	float nx = vect.x;
 	float ny = vect.y;
 	float nz = vect.z;
-	float angle = angle_d * PI / 180.0;
+	float angle = (float)(angle_d * PI / 180.0);
 	float c = cos(angle);
 	float s = sin(angle);
 

@@ -81,7 +81,7 @@ void OBB::execute() {
 
 void SATtest(const glm::vec4 axis, const std::vector<glm::vec4> vertex, float& min, float& max)
 {
-	min = HUGE, max = -HUGE;
+	min = (float)HUGE, max = (float)-HUGE;
 	for (int i = 0; i < vertex.size(); i++)
 	{
 		float dot = glm::dot(glm::vec3(vertex[i]), glm::vec3(axis));

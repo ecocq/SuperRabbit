@@ -24,7 +24,7 @@ void Camera::execute(GLFWwindow *window)
 	glfwSetCursorPos(window, 1024 / 2, 768 / 2);
 	horizontalAngle -= mouseSpeed * float(1024 / 2 - xpos);
 	verticalAngle += mouseSpeed * float(768 / 2 - ypos);
-	verticalAngle = (verticalAngle >= 89 || verticalAngle <= -89) ? copysign(1, verticalAngle) * 89 : verticalAngle ;
+	verticalAngle = (verticalAngle >= 89 || verticalAngle <= -89) ? (float)copysign(1, verticalAngle) * 89 : verticalAngle ;
 
 	glm::vec3 right = rotation_y(horizontalAngle) * glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -47,18 +47,18 @@ void Camera::execute(GLFWwindow *window)
 		position = orthographic_projection(glm::vec3(0, 1, 0)) *translation(-cartesian_dir_right * speed) * position;
 	}
 
-	if (position.z > 3.8) {
-		position.z = 3.8;
+	if (position.z > 3.8f) {
+		position.z = 3.8f;
 	}
-	if (position.z < -0.8) {
-		position.z = -0.8;
+	if (position.z < -0.8f) {
+		position.z = -0.8f;
 	}
 
-	if (position.x < -2.8) {
-		position.x = -2.8;
+	if (position.x < -2.8f) {
+		position.x = -2.8f;
 	}
-	if (position.x > 36.8) {
-		position.x = 36.8;
+	if (position.x > 36.8f) {
+		position.x = 36.8f;
 	}
 
 	CamViewMatrice = glm::lookAt(glm::vec3(position), glm::vec3(position) + cartesian_dir, glm::vec3(0,1,0));
