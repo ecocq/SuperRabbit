@@ -110,7 +110,7 @@ void MovableObject::applyTransformsFromControls() {
 	}
 
 	//Not useful in the game
-	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
 		applyOrthographicProjection(glm::vec3(0, 1, 0));
 	}
 
