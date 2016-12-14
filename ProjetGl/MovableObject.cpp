@@ -99,23 +99,26 @@ void MovableObject::applyTransformsFromControls() {
 		applyScale(glm::vec3(0.9, 0.9, 0.9));
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
-		applyReflection(glm::vec3(0, 1, 0));
-	}
 
-	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
 		applyShearingYZ(shearSpeed, 0);
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
 		applyShearingYZ(-shearSpeed, 0);
+  }
+
+	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
+		applyReflection(glm::vec3(0, 1, 0));
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) {
-		applyShearOrNot(true);
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) {
-		applyShearOrNot(false);
+	//Not useful in the game
+	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
+		applyOrthographicProjection(glm::vec3(0, 1, 0));
 	}
+
+
+
 }
