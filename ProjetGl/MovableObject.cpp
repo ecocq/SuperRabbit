@@ -106,12 +106,10 @@ void MovableObject::applyTransformsFromControls() {
 
 	if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
 		applyShearingYZ(-shearSpeed, 0);
-  }
+	}
 
 	if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
 		applyReflection(glm::vec3(0, 1, 0));
-	}
-
 	}
 
 	//Not useful in the game
