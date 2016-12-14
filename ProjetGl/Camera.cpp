@@ -57,8 +57,8 @@ void Camera::execute(GLFWwindow *window)
 	if (position.x < -2.8) {
 		position.x = -2.8;
 	}
-	if (position.x > 40) {
-		position.x = 40;
+	if (position.x > 36.8) {
+		position.x = 36.8;
 	}
 
 	CamViewMatrice = glm::lookAt(glm::vec3(position), glm::vec3(position) + cartesian_dir, glm::vec3(0,1,0));

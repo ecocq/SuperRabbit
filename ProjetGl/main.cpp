@@ -113,9 +113,6 @@ int main(void)
 	objects.push_back(m_rabbit);
 	objects.push_back(carrot);
 
-	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, -10)));
-	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, glm::vec3(0, 0, 10)));
-	//objects.push_back(new PhysicalObject("obj/wall.obj", glm::vec3(1.0f, 1.0f, 1.0f), fragColor, window, rotation_x(90) * translation(glm::vec3(0,-10,-1))));
 	// Walls and obstacles
 	glm::vec3 wallColor(0.5f, 0.5f, 0.5f);
 	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(-3, -3, -1), glm::vec3(0, 0, 0), wallColor, fragColor, window, programID));
@@ -203,8 +200,11 @@ int main(void)
 			objects[i]->execute(MVP);
 		}
 
-		m_rabbit->printIfReached(glm::vec3(21.0f, -3.0f, -1.0f), "You win!");
-		carrot->animateTrans(glm::vec3(20.0f, 0.0f, 0.0f), (std::clock() - start) / (double)CLOCKS_PER_SEC);
+		printText2D("IJKL UO move - PM up/down - YH bend over/back", 45, 40, 15);
+		printText2D(",; rotate - wheel scale - 34 shear - 5 reflexion", 30, 20, 15);
+
+		m_rabbit->printIfReached(glm::vec3(22.0f, -3.0f, -1.0f), "You win!");
+		carrot->animateTrans(glm::vec3(30.0f, 0.0f, 0.0f), (std::clock() - start) / (double)CLOCKS_PER_SEC);
 
 		// Swap buffers
 		glfwSwapBuffers(window);

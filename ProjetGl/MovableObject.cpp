@@ -30,12 +30,14 @@ void MovableObject::fix_vertex(glm::mat4 MVP) {
 	for (int i = 1; i < m_objects.size(); i++) {
 		if (m_OBB.collides(m_objects[i]->m_OBB)) {
 			ModelMatrix = glm::mat4(1.0);
+			scale_factor = scale_old;
 		}
 	}
 	float pos_x = (CompleteModelMatrix * glm::vec4(0, 0, 0, 1)).x;
-	if (scale_factor < 1.0f && (pos_x < 5.0f || pos_x > 11.5f)) {
+	if (scale_factor != 1.0f && (pos_x < 5.0f || pos_x > 11.5f)) {
 		ModelMatrix = scale(glm::vec3(1.0 / scale_factor, 1.0 / scale_factor, 1.0 / scale_factor));
 		scale_factor = 1.0f;
+		scale_old = 1.0f;
 	}
 
 	GLint MVPHandle = glGetUniformLocation(programID, "MVP");
@@ -80,7 +82,7 @@ void MovableObject::applyTransformsFromControls() {
 
 	if (wheel != 0) {
 		if (wheel > 0) {
-			applyScale(glm::vec3(1.2, 1.2, 1.2));
+			this->applyScale(glm::vec3(1.25, 1.25, 1.25));
 		}
 		else if (wheel < 0) {
 			this->applyScale(glm::vec3(0.8, 0.8, 0.8));
@@ -92,11 +94,11 @@ void MovableObject::applyTransformsFromControls() {
 	//applyRotationAroundAxis
 
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
-		applyScale(glm::vec3(1.1, 1.1, 1.1));
+		applyScale(glm::vec3(1.25, 1.25, 1.25));
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
-		applyScale(glm::vec3(0.9, 0.9, 0.9));
+		applyScale(glm::vec3(0.8, 0.8, 0.8));
 	}
 
 

@@ -23,7 +23,6 @@ protected:
 	glm::mat4 ModelMatrix;
 	glm::mat4 CompleteModelMatrix;
 	glm::vec3 translated;
-	glm::vec3 translated_old;
 
 	bool textures_coords_valid;
 	bool normals_valid;
@@ -33,6 +32,7 @@ protected:
 	const float angularSpeed = 1;
 	const float shearSpeed = 0.05f;
 	float scale_factor = 1;
+	float scale_old = 1;
 	bool scalable;
 
 public:

@@ -183,7 +183,6 @@ void PhysicalObject::printIfReached(glm::vec3 direction, char* text) {
 /* --- Apply Transformations --- */
 
 void PhysicalObject::applyTranslation(glm::vec3 trans) {
-	translated_old = translated;
 	translated = translated + trans;
 
 	ModelMatrix = ModelMatrix * translation(trans);
@@ -223,8 +222,12 @@ void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
 
 void PhysicalObject::applyScale(glm::vec3 vector) {
 	float pos_x = (CompleteModelMatrix * glm::vec4(0, 0, 0, 1)).x;
-	if (scale_factor > 0.05f && pos_x >= 5.0f && pos_x <= 11.5f) {
+	if (pos_x >= 5.0f && pos_x <= 11.5f) {
+		if (vector.x < 1 && scale_factor < 0.13f) {
+			return;
+		}
 		ModelMatrix = scale(vector);
+		scale_old = scale_factor;
 		scale_factor *= vector.x;
 	} 
 }
