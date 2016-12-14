@@ -30,6 +30,10 @@ protected:
 
 	const char* ObjPath;
 	float speed = 0.02f;
+	const float angularSpeed = 1;
+	const float shearSpeed = 0.05f;
+	float scale_factor = 1;
+	bool scalable;
 
 public:
 	PhysicalObject(const char* path, glm::vec3 objcolor, GLuint fragShader, GLFWwindow* Objwindow, GLint programID, glm::mat4 initialPos = glm::mat4(1.0));

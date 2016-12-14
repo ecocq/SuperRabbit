@@ -175,7 +175,6 @@ void PhysicalObject::applyTransformsFromControls() {
 }
 
 void PhysicalObject::printIfReached(glm::vec3 direction, char* text) {
-	std::cout << this->CompleteModelMatrix[3][0] << " " << this->CompleteModelMatrix[3][1] << " " << this->CompleteModelMatrix[3][2] << std::endl;
 	if (CompleteModelMatrix[3][0] > direction.x && CompleteModelMatrix[3][1] > direction.y && CompleteModelMatrix[3][2] > direction.z) {
 		printText2D(text, 170, 270, 50);
 	}
@@ -223,8 +222,11 @@ void PhysicalObject::applyRotationAroundAxis(float angle_d, glm::vec3 vect) {
 }
 
 void PhysicalObject::applyScale(glm::vec3 vector) {
-	glm::vec3 pos = position + translated;
-	ModelMatrix = scale(vector);
+	float pos_x = (CompleteModelMatrix * glm::vec4(0, 0, 0, 1)).x;
+	if (scale_factor > 0.05f && pos_x >= 5.0f && pos_x <= 11.5f) {
+		ModelMatrix = scale(vector);
+		scale_factor *= vector.x;
+	} 
 }
 
 void PhysicalObject::applyScaleAlongAxis(float k, glm::vec3 axis) {
