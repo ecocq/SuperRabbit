@@ -123,7 +123,7 @@ int main(void)
 	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(-3, -3, 4), glm::vec3(0, 0, 0), wallColor, fragColor, window, programID));
 	objects.push_back(new Wall(glm::vec2(40, 5), glm::vec3(-3, 2, -1), glm::vec3(-90, 0, 0), wallColor, fragColor, window, programID));
 	objects.push_back(new Wall(glm::vec2(5, 5), glm::vec3(-3, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
-	objects.push_back(new Wall(glm::vec2(5, 5), glm::vec3(37, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(5, 5), glm::vec3(37, -3, -1), glm::vec3(0, 90, 0), glm::vec3(1, 0.5f, 0.5f), fragColor, window, programID));
 
 	// Obstacle 1
 	wallColor = glm::vec3(0.5f, 1, 0.5f);
@@ -147,9 +147,9 @@ int main(void)
 	// Obstacle Shear
 	wallColor = glm::vec3(0.5f, 0.5f, 1);
 	objects.push_back(new Wall(glm::vec2(1, 5), glm::vec3(20, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
-	objects.push_back(new Wall(glm::vec2(4, 3.5f), glm::vec3(20, -1.5f, 0), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(4, 3.3f), glm::vec3(20, -1.3f, 0), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 	objects.push_back(new Wall(glm::vec2(3, 3), glm::vec3(20, -3, 0), glm::vec3(45, 90, 0), wallColor, fragColor, window, programID));
-	objects.push_back(new Wall(glm::vec2(3, 4), glm::vec3(20, -3, 1), glm::vec3(-45, 90, 0), wallColor, fragColor, window, programID));
+	objects.push_back(new Wall(glm::vec2(3, 4), glm::vec3(20, -3, 1.2f), glm::vec3(-45, 90, 0), wallColor, fragColor, window, programID));
 
 	m_rabbit->setObjects(objects);
 
