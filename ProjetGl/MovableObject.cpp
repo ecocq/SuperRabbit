@@ -10,7 +10,7 @@
 #include "PhysicalObject.h"
 
 #include "MovableObject.h"
-static int wheel;
+static double wheel;
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
@@ -27,7 +27,7 @@ void MovableObject::fix_vertex(glm::mat4 MVP) {
 	m_OBB.transform(CompleteModelMatrix * ModelMatrix);
 
 	// Ignore first object
-	for (int i = 1; i < m_objects.size(); i++) {
+	for (unsigned int i = 1; i < m_objects.size(); i++) {
 		if (m_OBB.collides(m_objects[i]->m_OBB)) {
 			ModelMatrix = glm::mat4(1.0);
 			scale_factor = scale_old;
@@ -90,9 +90,6 @@ void MovableObject::applyTransformsFromControls() {
 		wheel = 0;
 	}
 
-	//Apply when click and move mouse?
-	//applyRotationAroundAxis
-
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
 		applyScale(glm::vec3(1.25, 1.25, 1.25));
 	}
@@ -100,7 +97,6 @@ void MovableObject::applyTransformsFromControls() {
 	if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
 		applyScale(glm::vec3(0.8, 0.8, 0.8));
 	}
-
 
 	if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
 		applyShearingYZ(shearSpeed, 0);
@@ -118,7 +114,5 @@ void MovableObject::applyTransformsFromControls() {
 	if (glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS) {
 		applyOrthographicProjection(glm::vec3(0, 1, 0));
 	}
-
-
-
+	
 }

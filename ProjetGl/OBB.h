@@ -27,7 +27,6 @@ public:
 	bool collides(const OBB &other);
 
 	void execute();
-	void restore();
 
 
 private:

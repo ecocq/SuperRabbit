@@ -246,10 +246,6 @@ void PhysicalObject::applyReflection(glm::vec3 axis) {
 	glm::vec3 pos = position + translated;
 	ModelMatrix = ModelMatrix * reflection(axis);
 }
-void PhysicalObject::applyShearOrNot(bool unshear) {
-	glm::vec3 pos = position + translated;
-	ModelMatrix = ModelMatrix * shear(unshear);
-}
 
 void PhysicalObject::applyShearingXY(float s, float t) {
 	glm::vec3 pos = position + translated;

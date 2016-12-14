@@ -23,7 +23,6 @@ glm::mat4 scale_along_axis(float k, glm::vec3 axis);
 glm::mat4 orthographic_projection(glm::vec3 axis);
 glm::mat4 reflection(glm::vec3 axis);
 
-glm::mat4 shear(bool unshear);
 glm::mat4 shearing_xy(float s, float t);
 glm::mat4 shearing_xz(float s, float t);
 glm::mat4 shearing_yz(float s, float t);

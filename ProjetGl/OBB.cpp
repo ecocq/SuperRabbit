@@ -39,11 +39,6 @@ void OBB::initializePosition() {
 	vertex_normals = initial_vertex_normals;
 }
 
-void OBB::restore() {
-	geometric_vertex = geometric_vertex_old;
-	vertex_normals = vertex_normals_old;
-}
-
 void OBB::transform(glm::mat4 _matrix) {
 	geometric_vertex_old = geometric_vertex;
 	vertex_normals_old = vertex_normals;
@@ -62,7 +57,9 @@ void OBB::transform(glm::mat4 _matrix) {
 }
 
 /* Draw bounding box */
-void OBB::execute() {/*
+void OBB::execute() {
+	// Uncomment to draw OBB lines
+	/*
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, geometric_vertex.size() * sizeof(glm::vec4), &geometric_vertex[0], GL_STATIC_DRAW);

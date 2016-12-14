@@ -15,12 +15,12 @@ int count_substr(std::string s, std::string substr) {
 }
 
 void initExtremum(extremum &_extremum) {
-	_extremum.xmax = -HUGE;
-	_extremum.xmin = HUGE;
-	_extremum.ymax = -HUGE;
-	_extremum.ymin = HUGE;
-	_extremum.zmax = -HUGE;
-	_extremum.zmin = HUGE;
+	_extremum.xmax = (float) -HUGE;
+	_extremum.xmin = (float) HUGE;
+	_extremum.ymax = (float) -HUGE;
+	_extremum.ymin = (float) HUGE;
+	_extremum.zmax = (float) -HUGE;
+	_extremum.zmin = (float) HUGE;
 }
 
 void updateExtremum(extremum &_extremum, glm::vec4 vertex) {
@@ -155,28 +155,19 @@ bool loadObjFile(const char* file_path, std::vector<glm::vec4> &geometric_vertex
 					}
 					nbVertices++;
 				}
-
-			    // TODO : handle errors
 			}
 
-			
-				for each(int vertex in m_face.vertex) {
-					geometric_vertex.push_back(temp_vertex[vertex - 1]);
-				}
-				for each(int uv in m_face.text_coords) {
-					texture_coords.push_back(temp_texture_coords[uv - 1]);
-				}
-				for each(int normal in m_face.normals) {
-					vertex_normals.push_back(temp_normals[normal - 1]);
-				}
-				temp_faces.push_back(m_face);
-			
-			
-	
+			for each(int vertex in m_face.vertex) {
+				geometric_vertex.push_back(temp_vertex[vertex - 1]);
+			}
+			for each(int uv in m_face.text_coords) {
+				texture_coords.push_back(temp_texture_coords[uv - 1]);
+			}
+			for each(int normal in m_face.normals) {
+				vertex_normals.push_back(temp_normals[normal - 1]);
+			}
+			temp_faces.push_back(m_face);	
 		}
 	}
-
-	
-
 	return true;
 }

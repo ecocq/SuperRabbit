@@ -96,12 +96,6 @@ int main(void)
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 	GLuint ViewID = glGetUniformLocation(programID, "View_matrix");
 
-	// Load the texture
-	//---------------------------------------- TODO REMOVE ????
-	GLuint Texture = loadDDS("obj/wolf-obj.mtl");
-
-	// Get a handle for our "myTextureSampler" uniform
-	// GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 
 	// Get a handle for our "fragmentColor" uniform
 	GLuint fragColor = glGetUniformLocation(programID, "m_fragColor");
@@ -164,7 +158,7 @@ int main(void)
 	ViewMatrix = cam->getCamView();
 	MVP = ProjectionMatrix * ViewMatrix * glm::mat4(1.0);
 
-	for (int i = 0; i < objects.size(); i++)
+	for (uint i = 0; i < objects.size(); i++)
 	{
 		objects[i]->initialize(MVP);
 	}
@@ -189,13 +183,7 @@ int main(void)
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 		glUniformMatrix4fv(ViewID, 1, GL_FALSE, &ViewMatrix[0][0]);
 
-		// Bind our texture in Texture Unit 0
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, Texture);
-		// Set our "myTextureSampler" sampler to user Texture Unit 0
-		// glUniform1i(TextureID, 0);
-
-		for (int i = 0; i < objects.size(); i++)
+		for (uint i = 0; i < objects.size(); i++)
 		{
 			objects[i]->execute(MVP);
 		}
@@ -214,14 +202,13 @@ int main(void)
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
 	
-	for (int i = 0; i < objects.size(); i++)
+	for (uint i = 0; i < objects.size(); i++)
 	{
 		delete(objects[i]);
 	}
 	objects.clear();
 
 	glDeleteProgram(programID);
-	// glDeleteTextures(1, &TextureID);
 	glDeleteVertexArrays(1, &VertexArrayID);
 
 	// Close OpenGL window and terminate GLFW
