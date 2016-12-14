@@ -140,7 +140,7 @@ int main(void)
 	objects.push_back(new Wall(glm::vec2(5, 3), glm::vec3(15, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 	objects.push_back(new Wall(glm::vec2(1, 1), glm::vec3(15, 0, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
 	objects.push_back(new Wall(glm::vec2(2, 1), glm::vec3(15, 0, 2), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
-
+	
 	// Obstacle Shear
 	wallColor = glm::vec3(0.5f, 0.5f, 1);
 	objects.push_back(new Wall(glm::vec2(1, 5), glm::vec3(20, -3, -1), glm::vec3(0, 90, 0), wallColor, fragColor, window, programID));
