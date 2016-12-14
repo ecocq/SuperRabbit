@@ -25,41 +25,24 @@ void main(){
 	// Distance to the light
 	float distance = length( LightPosition - vertexPosition_world );
 
-	// Normal of the computed fragment, in camera space
 	vec4 n = normalize( Normal_camera );
-	// Direction of the light (from the fragment to the light)
 	vec4 l = normalize( LightDirection_camera );
-
-	// Cosine of the angle between the normal and the light direction, 
-	// clamped above 0
-	//  - light is at the vertical of the triangle -> 1
-	//  - light is perpendicular to the triangle -> 0
-	//  - light is behind the triangle -> 0
 	float cosTheta = clamp( dot( n,l ), 0,1 );
-
-	// Eye vector (towards the camera)
 	vec4 E = normalize(EyeDirection_camera);
-	// Direction in which the triangle reflects the light
 	vec4 R = reflect(-l,n);
-
-	// Cosine of the angle between the Eye vector and the Reflect vector,
-	// clamped to 0
-	//  - Looking into the reflection -> 1
-	//  - Looking elsewhere -> < 1
 	float cosAlpha = clamp( dot( E,R ), 0,1 );
 
 	color = 
-		// Ambient : simulates indirect lighting
+
 		MaterialAmbientColor;
 	for(int n = 0; n <= 10; n++){
 	vec4 LightPosition = vec4(n*5-2.5,2.5,1.5,1);
 	float distance = length( LightPosition - vertexPosition_world );
 	color = color + 
-			// Diffuse : "color" of the object
+
 		MaterialDiffuseColor * LightColor * LightPower * cosTheta / (distance*distance) +
-		// Specular : reflective highlight, like a mirror
+	
 		MaterialSpecularColor * LightColor * LightPower * pow(cosAlpha,5) / (distance*distance);	
 
 	}
-	// color = m_fragColor;	
 }
